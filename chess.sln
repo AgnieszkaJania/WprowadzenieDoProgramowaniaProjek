@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessAi", "ChessAi\ChessAi.csproj", "{814FD135-E455-4091-ABE2-B27DA3ED8597}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessLogic", "ChessLogic\ChessLogic.csproj", "{1D9CB601-4CDE-4E4B-98DB-7604D97C4A72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessView", "ChessView\ChessView.csproj", "{172047F0-CA9F-4337-A5B2-B81DED74F54C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{814FD135-E455-4091-ABE2-B27DA3ED8597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{814FD135-E455-4091-ABE2-B27DA3ED8597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{814FD135-E455-4091-ABE2-B27DA3ED8597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{814FD135-E455-4091-ABE2-B27DA3ED8597}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D9CB601-4CDE-4E4B-98DB-7604D97C4A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D9CB601-4CDE-4E4B-98DB-7604D97C4A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D9CB601-4CDE-4E4B-98DB-7604D97C4A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D9CB601-4CDE-4E4B-98DB-7604D97C4A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{172047F0-CA9F-4337-A5B2-B81DED74F54C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{172047F0-CA9F-4337-A5B2-B81DED74F54C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{172047F0-CA9F-4337-A5B2-B81DED74F54C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{172047F0-CA9F-4337-A5B2-B81DED74F54C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9D8DA9CC-FF4F-40AA-A8AA-02231783671C}
+	EndGlobalSection
+EndGlobal
