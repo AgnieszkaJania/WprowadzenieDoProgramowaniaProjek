@@ -2,53 +2,183 @@
 
 namespace ChessView
 {
+    /// <summary>
+    /// Drawing board
+    /// </summary>
     class Program
     {
-        const int BoardSize = 8;
-        const int FieldWidth = 5;
-        const int FieldHeight = 3;
+        //if even, it is played as white else black
+        const int start = 0;
+        //size of board
+        const int boardSize = 8;
+        //field size
+        const int fieldWidth = 5;
+        const int fieldHeight = 3;
+        //position of cursor
+        static int positionX = 3;
+        static int positionY = 7;
+        //position of selected field
+        static int selectedX = -1;
+        static int selectedY = -1;
 
+        /// <summary>
+        /// Draw a Board
+        /// </summary>
         static void BoardDraw()
         {
-            int HorizontalCentering = (Console.WindowWidth - (BoardSize * FieldWidth)) / 2;
-            int VerticalCentering = (Console.WindowHeight - (BoardSize*FieldHeight))/2;
-
-            for(int i=0;i<VerticalCentering;i++)
-                Console.WriteLine();
             //board height
-            for (int i = 0; i < BoardSize; i++)
+            for (int i = 0; i < boardSize; i++)
             {
-                //field height
-                for (int k = 0; k < FieldHeight; k++)
+                //board width
+                for (int j = 0; j < boardSize; j++)
                 {
-                    //centering the board
-                    for (int o = 0; o < HorizontalCentering; o++)
-                        Console.Write(' ');
-
-                    //board width
-                    for (int j = 0; j < BoardSize; j++)
-                    {
-                        //field color
-                        if ((i + j) % 2 == 0)
-                            Console.BackgroundColor = ConsoleColor.White;
-                        else
-                            Console.BackgroundColor = ConsoleColor.Green;
-
-                        //field width
-                        for (int l = 0; l < FieldWidth; l++)
-                        {
-                            Console.Write(' ');
-                        }
-                    }
-                    Console.ResetColor();
-                    Console.WriteLine();
+                    DrawField(i, j);
                 }
             }
         }
+        /// <summary>
+        /// Draw a single field
+        /// </summary>
+        /// <param name="x">Field position X</param>
+        /// <param name="y">Field position Y</param>
+        static void DrawField(int x, int y)
+        {
+            int HorizontalCentering = (Console.WindowWidth - (boardSize * fieldWidth)) / 2;
+            //check data valid
+            if (y < 0) return;
+            if (y >= boardSize) return;
+            if (x < 0) return;
+            if (x >= boardSize) return;
 
+            //select color
+            if (x == selectedX && y == selectedY)
+                Console.BackgroundColor = ConsoleColor.Red;
+            else if (x == positionX && y == positionY)
+                Console.BackgroundColor = ConsoleColor.Blue;
+            else if ((x + y + start) % 2 == 0)
+                Console.BackgroundColor = ConsoleColor.Green;
+            else
+                Console.BackgroundColor = ConsoleColor.White;
+
+            //draw field
+            for (int i = 0; i < fieldHeight; i++)
+            {
+                Console.CursorTop = y * fieldHeight + i;
+                Console.CursorLeft = HorizontalCentering + (x * fieldWidth);
+                for (int j = 0; j < fieldWidth; j++)
+                {
+                    Console.Write(' ');
+                }
+            }
+
+            //set default color
+            Console.ResetColor();
+
+            //set default cursor position
+            Console.CursorLeft = 0;
+            Console.CursorTop = 0;
+        }
+
+        /// <summary>
+        /// Changes the position of the pointer
+        /// </summary>
+        /// <param name="x">Position X</param>
+        /// <param name="y">Position Y</param>
+        static void Apply(int x, int y)
+        {
+            //check data valid
+            if (y < 0) return;
+            if (y >= boardSize) return;
+            if (x < 0) return;
+            if (x >= boardSize) return;
+
+            //create a copy of the value
+            int OldPositionX = positionX;
+            int OldPositionY = positionY;
+            //confirm new data
+            positionX = x;
+            positionY = y;
+            //clear old pointer position
+            DrawField(OldPositionX, OldPositionY);
+
+            //draw new position
+            DrawField(positionX, positionY);
+        }
+        /// <summary>
+        /// change selection
+        /// </summary>
+        /// <param name="x">Position X</param>
+        /// <param name="y">Position Y</param>
+        static void ChangeSelected(int x, int y)
+        {
+            //check data valid
+            if (y < 0) return;
+            if (y >= boardSize) return;
+            if (x < 0) return;
+            if (x >= boardSize) return;
+
+            if (selectedX < 0 || selectedY < 0)
+            {
+                selectedX = x;
+                selectedY = y;
+
+                //clear old pointer position
+                DrawField(selectedX, selectedY);
+            }
+            else
+            {
+                //create a copy of the value
+                int OldSelectedX = selectedX;
+                int OldSelectedY = selectedY;
+
+                //confirm new data
+                selectedX = -1;
+                selectedY = -1;
+
+                //clear old pointer position
+                DrawField(OldSelectedX, OldSelectedY);
+            }
+        }
+        /// <summary>
+        /// Control support
+        /// </summary>
+        static void Control()
+        {
+            ConsoleKey key = Console.ReadKey().Key;
+            switch (key)
+            {
+                case ConsoleKey.UpArrow:
+                    Apply(positionX, positionY-1);
+                    break;
+                case ConsoleKey.DownArrow:
+                    Apply(positionX, positionY+1);
+                    break;
+                case ConsoleKey.LeftArrow:
+                    Apply(positionX-1, positionY);
+                    break;
+                case ConsoleKey.RightArrow:
+                    Apply(positionX+1, positionY);
+                    break;
+                case ConsoleKey.Enter:
+                    ChangeSelected(positionX, positionY);
+                    break;
+                default:
+                    Console.CursorLeft = 0;
+                    Console.CursorTop = 0;
+                    break;
+            }
+        }
+        /// <summary>
+        /// Main loop
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             BoardDraw();
+            while (true)
+            {
+                Control();
+            }
         }
     }
 }
