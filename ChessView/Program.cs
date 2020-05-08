@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ChessLogic;
 
 namespace ChessView
 {
@@ -7,12 +10,15 @@ namespace ChessView
     /// </summary>
     class Program
     {
+        //pieces icons
+        static Dictionary<string, char> piecesIcons = new Dictionary<string, char>();
+        static Chess Board;
         //if even, it is played as white else black
         const int start = 0;
         //size of board
         const int boardSize = 8;
         //field size
-        const int fieldWidth = 5;
+        const int fieldWidth = 4;
         const int fieldHeight = 3;
         //position of cursor
         static int positionX = 3;
@@ -36,6 +42,7 @@ namespace ChessView
                 }
             }
         }
+        static Random R = new Random();
         /// <summary>
         /// Draw a single field
         /// </summary>
@@ -67,7 +74,12 @@ namespace ChessView
                 Console.CursorLeft = HorizontalCentering + (x * fieldWidth);
                 for (int j = 0; j < fieldWidth; j++)
                 {
-                    Console.Write(' ');
+                    if (i == fieldHeight / 2 && j == (fieldWidth / 2) - 1)
+                    {
+                            Console.Write(piecesIcons.Values.ToArray()[R.Next(0,6)]);
+                    }
+                    else
+                        Console.Write(' ');
                 }
             }
 
@@ -148,16 +160,16 @@ namespace ChessView
             switch (key)
             {
                 case ConsoleKey.UpArrow:
-                    Apply(positionX, positionY-1);
+                    Apply(positionX, positionY - 1);
                     break;
                 case ConsoleKey.DownArrow:
-                    Apply(positionX, positionY+1);
+                    Apply(positionX, positionY + 1);
                     break;
                 case ConsoleKey.LeftArrow:
-                    Apply(positionX-1, positionY);
+                    Apply(positionX - 1, positionY);
                     break;
                 case ConsoleKey.RightArrow:
-                    Apply(positionX+1, positionY);
+                    Apply(positionX + 1, positionY);
                     break;
                 case ConsoleKey.Enter:
                     ChangeSelected(positionX, positionY);
@@ -174,7 +186,19 @@ namespace ChessView
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            //set encoding to utf8
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            //init Pieces
+            piecesIcons.Add("King", '♚');
+            piecesIcons.Add("Queen", '♛');
+            piecesIcons.Add("Rock", '♜');
+            piecesIcons.Add("Bishop", '♝');
+            piecesIcons.Add("Knight", '♞');
+            piecesIcons.Add("Pawn", '♟');
+
+            ////draw board
             BoardDraw();
+            ////wait for inputs
             while (true)
             {
                 Control();
