@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
-using System.Linq;
 using ChessLogic;
 
 namespace ChessView
@@ -10,27 +10,32 @@ namespace ChessView
     /// </summary>
     class Program
     {
-        //pieces icons
-        static Dictionary<string, char> piecesIcons = new Dictionary<string, char>();
-        static Chess Board;
-        //if even, it is played as white else black
-        const int start = 0;
-        //size of board
-        const int boardSize = 8;
-        //field size
+        //position of cursor
+        static Point cursor = new Point(3, 6);
+        //selected fields
+        static List<Point> selected = new List<Point>();
+        //game logic
+        static Game game = new Game();
+        //sizes
+        static int boardSize = 8;
         const int fieldWidth = 4;
         const int fieldHeight = 3;
-        //position of cursor
-        static int positionX = 3;
-        static int positionY = 7;
-        //position of selected field
-        static int selectedX = -1;
-        static int selectedY = -1;
+        //side
+        const bool side = false;
+        //dictionery pieces and icons
+        static Dictionary<string, char> piecesIcons = new Dictionary<string, char> {
+            { "King", '♚' },
+            { "Queen", '♛'},
+            { "Rock", '♜'},
+            { "Bishop", '♝'},
+            { "Knight", '♞'},
+            { "Pawn", '♟'}
+        };
 
         /// <summary>
-        /// Draw a Board
+        /// drawing all board
         /// </summary>
-        static void BoardDraw()
+        static void DrawBoard()
         {
             //board height
             for (int i = 0; i < boardSize; i++)
@@ -38,171 +43,114 @@ namespace ChessView
                 //board width
                 for (int j = 0; j < boardSize; j++)
                 {
-                    DrawField(i, j);
+                    DrawField(new Point(i, j));
                 }
             }
         }
-        static Random R = new Random();
-        /// <summary>
-        /// Draw a single field
-        /// </summary>
-        /// <param name="x">Field position X</param>
-        /// <param name="y">Field position Y</param>
-        static void DrawField(int x, int y)
-        {
-            int HorizontalCentering = (Console.WindowWidth - (boardSize * fieldWidth)) / 2;
-            //check data valid
-            if (y < 0) return;
-            if (y >= boardSize) return;
-            if (x < 0) return;
-            if (x >= boardSize) return;
 
-            //select color
-            if (x == selectedX && y == selectedY)
-                Console.BackgroundColor = ConsoleColor.Red;
-            else if (x == positionX && y == positionY)
+        /// <summary>
+        /// drawing single field
+        /// </summary>
+        /// <param name="point">position of drawing field</param>
+        static void DrawField(Point point)
+        {
+            //check data valid
+            if (!point.check(boardSize - 1))
+                return;
+            //center board
+            int shift = (Console.WindowWidth - (boardSize * fieldWidth)) / 2;
+            //set bg color
+            if (point.Equals(cursor))
                 Console.BackgroundColor = ConsoleColor.Blue;
-            else if ((x + y + start) % 2 == 0)
+            else if (point.AddXY % 2 == 0 == side)
                 Console.BackgroundColor = ConsoleColor.Green;
             else
                 Console.BackgroundColor = ConsoleColor.White;
 
-            //draw field
+            //field width
             for (int i = 0; i < fieldHeight; i++)
             {
-                Console.CursorTop = y * fieldHeight + i;
-                Console.CursorLeft = HorizontalCentering + (x * fieldWidth);
+                //set cursor position
+                Console.CursorTop = point.y * fieldHeight + i;
+                Console.CursorLeft = shift + (point.x * fieldWidth);
+                //field height
                 for (int j = 0; j < fieldWidth; j++)
                 {
-                    if (i == fieldHeight / 2 && j == (fieldWidth / 2) - 1)
-                    {
-                            Console.Write(piecesIcons.Values.ToArray()[R.Next(0,6)]);
-                    }
+                    if (i == fieldHeight / 2 && j == fieldWidth / 2 - 1)
+                        Console.Write(piecesIcons["King"]);
                     else
                         Console.Write(' ');
                 }
+                Console.WriteLine();
             }
-
-            //set default color
+            //set default bgcolor
             Console.ResetColor();
-
-            //set default cursor position
-            Console.CursorLeft = 0;
-            Console.CursorTop = 0;
         }
-
         /// <summary>
-        /// Changes the position of the pointer
+        /// change cursor position
         /// </summary>
-        /// <param name="x">Position X</param>
-        /// <param name="y">Position Y</param>
-        static void Apply(int x, int y)
+        /// <param name="position">new cursor position</param>
+        static public void MoveCursor(Point position)
         {
             //check data valid
-            if (y < 0) return;
-            if (y >= boardSize) return;
-            if (x < 0) return;
-            if (x >= boardSize) return;
-
-            //create a copy of the value
-            int OldPositionX = positionX;
-            int OldPositionY = positionY;
+            if (!position.check(boardSize - 1)) return;
+            //copy old position
+            Point old = cursor;
             //confirm new data
-            positionX = x;
-            positionY = y;
-            //clear old pointer position
-            DrawField(OldPositionX, OldPositionY);
-
-            //draw new position
-            DrawField(positionX, positionY);
+            cursor = position;
+            //clear old position
+            DrawField(old);
+            //draw new
+            DrawField(position);
         }
+
         /// <summary>
-        /// change selection
+        /// 
         /// </summary>
-        /// <param name="x">Position X</param>
-        /// <param name="y">Position Y</param>
-        static void ChangeSelected(int x, int y)
+        static void Apply()
         {
-            //check data valid
-            if (y < 0) return;
-            if (y >= boardSize) return;
-            if (x < 0) return;
-            if (x >= boardSize) return;
 
-            if (selectedX < 0 || selectedY < 0)
-            {
-                selectedX = x;
-                selectedY = y;
-
-                //clear old pointer position
-                DrawField(selectedX, selectedY);
-            }
-            else
-            {
-                //create a copy of the value
-                int OldSelectedX = selectedX;
-                int OldSelectedY = selectedY;
-
-                //confirm new data
-                selectedX = -1;
-                selectedY = -1;
-
-                //clear old pointer position
-                DrawField(OldSelectedX, OldSelectedY);
-            }
         }
+
         /// <summary>
-        /// Control support
+        /// main loop for game
         /// </summary>
-        static void Control()
+        static void Chess()
         {
-            ConsoleKey key = Console.ReadKey().Key;
-            switch (key)
+            //draw board
+            DrawBoard();
+            //infiniti loop
+            while(true)
             {
-                case ConsoleKey.UpArrow:
-                    Apply(positionX, positionY - 1);
-                    break;
-                case ConsoleKey.DownArrow:
-                    Apply(positionX, positionY + 1);
-                    break;
-                case ConsoleKey.LeftArrow:
-                    Apply(positionX - 1, positionY);
-                    break;
-                case ConsoleKey.RightArrow:
-                    Apply(positionX + 1, positionY);
-                    break;
-                case ConsoleKey.Enter:
-                    ChangeSelected(positionX, positionY);
-                    break;
-                default:
-                    Console.CursorLeft = 0;
-                    Console.CursorTop = 0;
-                    break;
+                //set console cursor location
+                Console.CursorLeft = 0;
+                Console.CursorTop = 0;
+                //get input
+                ConsoleKey key = Console.ReadKey().Key;
+                //select action
+                switch (key)
+                {
+                    case ConsoleKey.UpArrow:
+                        MoveCursor(cursor + new Point(0,-1));
+                        break;
+                    case ConsoleKey.DownArrow:
+                        MoveCursor(cursor + new Point(0, 1));
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        MoveCursor(cursor + new Point(-1, 0));
+                        break;
+                    case ConsoleKey.RightArrow:
+                        MoveCursor(cursor + new Point(1, 0));
+                        break;
+                }
             }
         }
-        /// <summary>
-        /// Main loop
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
-        {
-            //set encoding to utf8
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            //init Pieces
-            piecesIcons.Add("King", '♚');
-            piecesIcons.Add("Queen", '♛');
-            piecesIcons.Add("Rock", '♜');
-            piecesIcons.Add("Bishop", '♝');
-            piecesIcons.Add("Knight", '♞');
-            piecesIcons.Add("Pawn", '♟');
 
-            ////draw board
-            BoardDraw();
-            ////wait for inputs
-            while (true)
-            {
-                Control();
-            }
+        static void Main()
+        {
+            Console.OutputEncoding = Encoding.UTF8;
+            Chess();
+            Console.OutputEncoding = Encoding.Default;
         }
     }
 }
