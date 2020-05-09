@@ -23,6 +23,9 @@ namespace ChessLogic
             //kings
             piecesList.Add(new King(new Point(4, 0), this, false));
             piecesList.Add(new King(new Point(4, 7), this, true));
+            //queens
+            piecesList.Add(new Queen(new Point(3, 0), this, false));
+            piecesList.Add(new Queen(new Point(3, 7), this, true));
             //Pawn Black
             piecesList.Add(new Pawn(new Point(0, 1), this, false));
             piecesList.Add(new Pawn(new Point(1, 1), this, false));
@@ -36,11 +39,26 @@ namespace ChessLogic
             piecesList.Add(new Pawn(new Point(0, 6), this, true));
             piecesList.Add(new Pawn(new Point(1, 6), this, true));
             piecesList.Add(new Pawn(new Point(2, 6), this, true));
-            //piecesList.Add(new Pawn(new Point(3, 6), this, true));
-            piecesList.Add(new Pawn(new Point(4, 5), this, false));
-            //piecesList.Add(new Pawn(new Point(5, 6), this, true));
+            piecesList.Add(new Pawn(new Point(3, 6), this, true));
+            piecesList.Add(new Pawn(new Point(4, 5), this, true));
+            piecesList.Add(new Pawn(new Point(5, 6), this, true));
             piecesList.Add(new Pawn(new Point(6, 6), this, true));
             piecesList.Add(new Pawn(new Point(7, 6), this, true));
+            //knight
+            piecesList.Add(new Knight(new Point(1, 0), this, false));
+            piecesList.Add(new Knight(new Point(6, 0), this, false));
+            piecesList.Add(new Knight(new Point(1, 7), this, true));
+            piecesList.Add(new Knight(new Point(6, 7), this, true));
+            //rock
+            piecesList.Add(new Rock(new Point(0, 0), this, false));
+            piecesList.Add(new Rock(new Point(7, 0), this, false));
+            piecesList.Add(new Rock(new Point(0, 7), this, true));
+            piecesList.Add(new Rock(new Point(7, 7), this, true));
+            //Bishop
+            piecesList.Add(new Bishop(new Point(2, 0), this, false));
+            piecesList.Add(new Bishop(new Point(5, 0), this, false));
+            piecesList.Add(new Bishop(new Point(2, 7), this, true));
+            piecesList.Add(new Bishop(new Point(5, 7), this, true));
         }
         /// <summary>
         /// Check if occurs piece on the given coords
@@ -173,6 +191,21 @@ namespace ChessLogic
                     }
                 }
             }
+        }
+
+        public bool CheckIfPiece(Point position, out bool color)
+        {
+            color = false;
+            foreach(Piece p in piecesList)
+            {
+                if(p.AtPosition(position))
+                {
+                    color = p.Color;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

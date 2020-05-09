@@ -44,7 +44,7 @@ namespace ChessLogic
         /// </summary>
         /// <param name="coords">coords where piece have to go</param>
         /// <returns>true if successful</returns>
-        public bool TryMakeMove(Point coords)
+        public virtual bool TryMakeMove(Point coords)
         {
             if (PossibleMoves().Contains(coords))
             {
