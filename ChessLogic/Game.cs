@@ -23,6 +23,24 @@ namespace ChessLogic
             //kings
             piecesList.Add(new King(new Point(4, 0), this, false));
             piecesList.Add(new King(new Point(4, 7), this, true));
+            //Pawn Black
+            piecesList.Add(new Pawn(new Point(0, 1), this, false));
+            piecesList.Add(new Pawn(new Point(1, 1), this, false));
+            piecesList.Add(new Pawn(new Point(2, 1), this, false));
+            piecesList.Add(new Pawn(new Point(3, 1), this, false));
+            piecesList.Add(new Pawn(new Point(4, 1), this, false));
+            piecesList.Add(new Pawn(new Point(5, 1), this, false));
+            piecesList.Add(new Pawn(new Point(6, 1), this, false));
+            piecesList.Add(new Pawn(new Point(7, 1), this, false));
+            //Pawn White
+            piecesList.Add(new Pawn(new Point(0, 6), this, true));
+            piecesList.Add(new Pawn(new Point(1, 6), this, true));
+            piecesList.Add(new Pawn(new Point(2, 6), this, true));
+            piecesList.Add(new Pawn(new Point(3, 6), this, true));
+            piecesList.Add(new Pawn(new Point(4, 6), this, false));
+            piecesList.Add(new Pawn(new Point(5, 6), this, true));
+            piecesList.Add(new Pawn(new Point(6, 6), this, true));
+            piecesList.Add(new Pawn(new Point(7, 6), this, true));
         }
         /// <summary>
         /// Check if occurs piece on the given coords
@@ -73,14 +91,13 @@ namespace ChessLogic
             {
                 if (p.AtPosition(piece))
                 {
-                    if(p.TryMakeMove(coord))
+                    if (p.TryMakeMove(coord))
                     {
-                        
+                        TryBeatEnemy(coord, p.Color);
                         return true;
                     }
                     else
                     {
-                        Console.WriteLine("tu jestem");
                         return false;
                     }
                 }
@@ -91,9 +108,9 @@ namespace ChessLogic
         public List<Point> AllMoves(bool color)
         {
             List<Point> tmp = new List<Point>();
-            foreach(Piece p in piecesList)
+            foreach (Piece p in piecesList)
             {
-                if(p.Color==color)
+                if (p.Color == color)
                 {
                     var moves = p.PossibleMoves(false);
                     foreach (Point move in moves)
@@ -103,6 +120,40 @@ namespace ChessLogic
                 }
             }
             return tmp;
+        }
+
+        public bool CheckIfAlly(Point Position, bool color)
+        {
+            foreach(Piece p in piecesList)
+            {
+                if(p.AtPosition(Position))
+                {
+                    if(p.Color==color)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+
+        void TryBeatEnemy(Point Position, bool color)
+        {
+            foreach (Piece p in piecesList)
+            {
+                if (p.AtPosition(Position))
+                {
+                    if (p.Color != color)
+                    {
+                        piecesList.Remove(p);
+                        return;
+                    }
+                }
+            }
         }
     }
 }

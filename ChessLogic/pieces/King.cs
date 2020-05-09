@@ -21,12 +21,12 @@ namespace ChessLogic.pieces
         /// return list of possible moves
         /// </summary>
         /// <returns></returns>
-        public override List<Point> PossibleMoves(bool king=true)
+        public override List<Point> PossibleMoves(bool king = true)
         {
             List<Point> tmp = new List<Point>();
             //check enemi moves
             List<Point> enemyMoves = new List<Point>();
-            if(king)
+            if (king)
                 enemyMoves = other.AllMoves(!color);
 
             //check all moves around king
@@ -34,9 +34,19 @@ namespace ChessLogic.pieces
             {
                 for (int j = -1; j <= 1; j++)
                 {
-                    if (!(i == 0 && j == 0) && !other.TryGetPiece(position + new Point(i, j), out bool color, out string piece) && !(enemyMoves.Contains(position + new Point(i, j))))
+                    //excludes the possibility of making an empty move
+                    if (!(i == 0 && j == 0))
                     {
-                        tmp.Add(position + new Point(i, j));
+                        //Check if the ally is blocking the road
+                        if (!other.CheckIfAlly(position + new Point(i, j), color) || !king)
+                        {
+                            //check if the king doesn't want to come under the beating
+                            if (!enemyMoves.Contains(position + new Point(i, j)) || !king)
+                            {
+                                //add possible
+                                tmp.Add(position + new Point(i, j));
+                            }
+                        }
                     }
                 }
             }
