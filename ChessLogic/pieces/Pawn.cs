@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChessLogic.pieces
+namespace ChessLogic
 {
     class Pawn : Piece
     {

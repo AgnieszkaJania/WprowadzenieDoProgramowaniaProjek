@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 
-namespace ChessLogic.pieces
+namespace ChessLogic
 {
     class King : Piece
     {
+        bool FirstTour;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -16,6 +18,7 @@ namespace ChessLogic.pieces
         public King(Point coords, Game board, bool color) : base(coords, board, color)
         {
             pieceName = "King";
+            FirstTour = true;
         }
         /// <summary>
         /// return list of possible moves
@@ -51,7 +54,92 @@ namespace ChessLogic.pieces
                 }
             }
 
+            if (FirstTour && king)
+            {
+                List<Piece> rocks = other.GetAllPieces("Rock", color);
+
+                if (!other.CheckIfPiece(position + new Point(1, 0), out bool b1))
+                {
+                    if (!other.CheckIfPiece(position + new Point(2, 0), out bool b2))
+                    {
+                        foreach (Piece rock in rocks)
+                        {
+                            if (rock.AtPosition(position + new Point(3, 0)))
+                            {
+                                if (((Rock)(rock)).FirstTour)
+                                {
+                                    tmp.Add(position + new Point(2, 0));
+                                    tmp.Add(position + new Point(3, 0));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (!other.CheckIfPiece(position + new Point(-1, 0), out bool b3))
+                {
+                    if (!other.CheckIfPiece(position + new Point(-2, 0), out bool b4))
+                    {
+                        if (!other.CheckIfPiece(position + new Point(-3, 0), out bool b5))
+                        {
+                            foreach (Piece rock in rocks)
+                            {
+                                if (rock.AtPosition(position + new Point(-4, 0)))
+                                {
+                                    if (((Rock)(rock)).FirstTour)
+                                    {
+                                        tmp.Add(position + new Point(-2, 0));
+                                        tmp.Add(position + new Point(-3, 0));
+                                        tmp.Add(position + new Point(-4, 0));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             return tmp;
+        }
+        public override bool TryMakeMove(Point coords)
+        {
+            if (PossibleMoves().Contains(coords))
+            {
+                Point oldPosition = position;
+                FirstTour = false;
+                position = coords;
+
+                if ((oldPosition - position).x >= 2)
+                {
+                    position = oldPosition - new Point(2, 0);
+                    List<Piece> rocks = other.GetAllPieces("Rock", color);
+                    foreach (Piece rock in rocks)
+                    {
+                        if (rock.AtPosition(position - new Point(2, 0)))
+                        {
+                            rock.position = position - new Point(1, 0);
+                        }
+                    }
+                }
+                else if ((oldPosition - position).x <= -2)
+                {
+                    position = oldPosition + new Point(2, 0);
+                    List<Piece> rocks = other.GetAllPieces("Rock", color);
+                    foreach (Piece rock in rocks)
+                    {
+                        if (rock.AtPosition(position + new Point(1, 0)))
+                        {
+                            rock.position = position - new Point(1, 0);
+                        }
+                    }
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -2,10 +2,10 @@
 
 namespace ChessLogic
 {
-    abstract class Piece
+    public abstract class Piece
     {
         //position on board
-        protected Point position;
+        public Point position;
         //list of other Piece on board
         protected Game other;
         //pieces data

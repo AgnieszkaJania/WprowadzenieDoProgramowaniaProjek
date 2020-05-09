@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChessLogic.pieces
+namespace ChessLogic
 {
     class Rock : Piece
     {
+        public bool FirstTour;
+
         public Rock(Point coords, Game board, bool color) : base(coords, board, color)
         {
             pieceName = "Rock";
+            FirstTour = true;
         }
 
         public override List<Point> PossibleMoves(bool king = true)
@@ -89,6 +92,20 @@ namespace ChessLogic.pieces
             }
 
             return tmp;
+        }
+
+        public override bool TryMakeMove(Point coords)
+        {
+            if (PossibleMoves().Contains(coords))
+            {
+                FirstTour = false;
+                position = coords;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using ChessLogic.pieces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 
 namespace ChessLogic
 {
@@ -142,11 +142,11 @@ namespace ChessLogic
 
         public bool CheckIfAlly(Point Position, bool color)
         {
-            foreach(Piece p in piecesList)
+            foreach (Piece p in piecesList)
             {
-                if(p.AtPosition(Position))
+                if (p.AtPosition(Position))
                 {
-                    if(p.Color==color)
+                    if (p.Color == color)
                     {
                         return true;
                     }
@@ -196,16 +196,29 @@ namespace ChessLogic
         public bool CheckIfPiece(Point position, out bool color)
         {
             color = false;
-            foreach(Piece p in piecesList)
+            foreach (Piece p in piecesList)
             {
-                if(p.AtPosition(position))
+                if (p.AtPosition(position))
                 {
                     color = p.Color;
                     return true;
                 }
             }
-
             return false;
+        }
+
+        public List<Piece> GetAllPieces(string pieceType, bool color)
+        {
+            List<Piece> tmp = new List<Piece>();
+            foreach(Piece piece in piecesList)
+            {
+                if (piece.PieceName == pieceType && piece.Color == color)
+                {
+                    tmp.Add(piece);
+                }
+            }
+
+            return tmp;
         }
     }
 }
