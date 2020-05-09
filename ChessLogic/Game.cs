@@ -36,9 +36,9 @@ namespace ChessLogic
             piecesList.Add(new Pawn(new Point(0, 6), this, true));
             piecesList.Add(new Pawn(new Point(1, 6), this, true));
             piecesList.Add(new Pawn(new Point(2, 6), this, true));
-            piecesList.Add(new Pawn(new Point(3, 6), this, true));
-            piecesList.Add(new Pawn(new Point(4, 6), this, false));
-            piecesList.Add(new Pawn(new Point(5, 6), this, true));
+            //piecesList.Add(new Pawn(new Point(3, 6), this, true));
+            piecesList.Add(new Pawn(new Point(4, 5), this, false));
+            //piecesList.Add(new Pawn(new Point(5, 6), this, true));
             piecesList.Add(new Pawn(new Point(6, 6), this, true));
             piecesList.Add(new Pawn(new Point(7, 6), this, true));
         }
@@ -129,6 +129,25 @@ namespace ChessLogic
                 if(p.AtPosition(Position))
                 {
                     if(p.Color==color)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool CheckIfEnemy(Point Position, bool color)
+        {
+            foreach (Piece p in piecesList)
+            {
+                if (p.AtPosition(Position))
+                {
+                    if (p.Color != color)
                     {
                         return true;
                     }

@@ -14,6 +14,14 @@ namespace ChessLogic
         //get piece data
         public string PieceName { get => pieceName; }
         public bool Color { get => color; }
+        public int Direction { get
+            {
+                if (color)
+                    return -1;
+                else
+                    return 1;
+            }
+        }
         /// <summary>
         /// Constructor
         /// </summary>
