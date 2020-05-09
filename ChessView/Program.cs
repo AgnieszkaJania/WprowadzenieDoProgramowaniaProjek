@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using ChessLogic;
+using System.Reflection.Metadata;
 
 namespace ChessView
 {
@@ -67,8 +68,8 @@ namespace ChessView
                 Console.BackgroundColor = ConsoleColor.Blue;
             else if (point.Equals(selected))
                 Console.BackgroundColor = ConsoleColor.DarkYellow;
-            //else if (movesList.Contains(point))
-            //    Console.BackgroundColor = ConsoleColor.Red;
+            else if (movesList.Contains(point))
+                Console.BackgroundColor = ConsoleColor.Red;
             else if (point.AddXY % 2 == 0 == side)
                 Console.BackgroundColor = ConsoleColor.Green;
             else
@@ -219,6 +220,20 @@ namespace ChessView
                         break;
                     case ConsoleKey.Enter:
                         Apply();
+                        break;
+                    case ConsoleKey.NumPad5:
+                        movesList = game.AllMoves(false);
+                        break;
+                    case ConsoleKey.NumPad8:
+                        movesList = game.AllMoves(true);
+                        break;
+                    case ConsoleKey.NumPad2:
+                        Console.WriteLine();
+                        Console.WriteLine(game.piecesList.Count + "            ");
+                        foreach(var tmp in game.piecesList)
+                        {
+                            Console.WriteLine(tmp.PieceName);
+                        }
                         break;
                 }
             }

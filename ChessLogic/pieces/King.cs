@@ -22,116 +22,120 @@ namespace ChessLogic
         /// return list of possible moves
         /// </summary>
         /// <returns></returns>
-        public override List<Point> PossibleMoves(bool king = true)
+        public override List<Point> PossibleMoves(bool check = true)
         {
-            List<Point> tmp = new List<Point>();
-            //check enemi moves
-            List<Point> enemyMoves = new List<Point>();
-            if (king)
-                enemyMoves = other.AllMoves(!color);
+            var tmp = new List<Point>();
 
-            //check all moves around king
-            for (int i = -1; i <= 1; i++)
+            if (firstTour)
             {
-                for (int j = -1; j <= 1; j++)
+                var rocks = other.GetAllPieces("Rock", color);
+                foreach (var rock in rocks)
                 {
-                    //excludes the possibility of making an empty move
-                    if (!(i == 0 && j == 0))
+                    if (rock.firstTour)
                     {
-                        //Check if the ally is blocking the road
-                        if (!other.CheckIfAlly(position + new Point(i, j), color) || !king)
+                        int min = (rock.position.x < position.x) ? rock.position.x : position.x;
+                        int max = (rock.position.x > position.x) ? rock.position.x : position.x;
+
+                        List<Point> RememberMe = new List<Point>();
+                        bool allay = false;
+
+                        for (int i = min; i <= max + 1; i++)
                         {
-                            //check if the king doesn't want to come under the beating
-                            if (!enemyMoves.Contains(position + new Point(i, j)) || !king)
+                            var point = new Point(i, position.y);
+
+                            if (other.CheckIfAlly(point, color) && point != position && point != rock.position)
                             {
-                                //add possible
-                                tmp.Add(position + new Point(i, j));
+                                allay = true;
+                                break;
+                            }
+
+                            tmp.Add(point);
+                            RememberMe.Add(point);
+                        }
+
+                        if (check)
+                        {
+                            for (int i = tmp.Count - 1; i >= 0; i--)
+                            {
+                                if (Check(tmp[i]) || allay)
+                                {
+                                    foreach (Point remember in RememberMe)
+                                    {
+                                        tmp.Remove(remember);
+                                    }
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
 
-            if (firstTour && king)
+            for (int i = -1; i <= 1; i++)
             {
-                List<Piece> rocks = other.GetAllPieces("Rock", color);
-
-                if (!other.CheckIfPiece(position + new Point(1, 0), out bool b1))
+                for (int j = -1; j <= 1; j++)
                 {
-                    if (!other.CheckIfPiece(position + new Point(2, 0), out bool b2))
+                    if (!(j == 0 && i == 0))
                     {
-                        foreach (Piece rock in rocks)
+                        Point newPoint = position + new Point(i, j);
+                        if (newPoint.check(7))
                         {
-                            if (rock.AtPosition(position + new Point(3, 0)))
-                            {
-                                if (((Rock)(rock)).firstTour)
-                                {
-                                    tmp.Add(position + new Point(2, 0));
-                                    tmp.Add(position + new Point(3, 0));
-                                }
-                            }
+                            if (!other.CheckIfAlly(newPoint, color))
+                                tmp.Add(newPoint);
                         }
                     }
                 }
+            }
 
-                if (!other.CheckIfPiece(position + new Point(-1, 0), out bool b3))
+            if (check)
+            {
+                for (int i = tmp.Count - 1; i >= 0; i--)
                 {
-                    if (!other.CheckIfPiece(position + new Point(-2, 0), out bool b4))
+                    if (Check(tmp[i]))
                     {
-                        if (!other.CheckIfPiece(position + new Point(-3, 0), out bool b5))
-                        {
-                            foreach (Piece rock in rocks)
-                            {
-                                if (rock.AtPosition(position + new Point(-4, 0)))
-                                {
-                                    if (((Rock)(rock)).firstTour)
-                                    {
-                                        tmp.Add(position + new Point(-2, 0));
-                                        tmp.Add(position + new Point(-3, 0));
-                                        tmp.Add(position + new Point(-4, 0));
-                                    }
-                                }
-                            }
-                        }
+                        tmp.Remove(tmp[i]);
                     }
                 }
             }
 
             return tmp;
         }
-        public override bool TryMakeMove(Point coords, bool undefined)
+
+        public override bool TryMakeMove(Point coords)
         {
-            if (PossibleMoves().Contains(coords))
+            if (PossibleMoves(other.check).Contains(coords))
             {
-                Point oldPosition = position;
+                var tmp = position - coords;
+
+                if (Math.Abs(tmp.x) > 1)
+                {
+                    var rocks = other.GetAllPieces("Rock", color);
+                    foreach (var rock in rocks)
+                    {
+                        if (tmp.x < 0)
+                        {
+                            if (rock.position == new Point(7, position.y))
+                            {
+                                rock.position = position + new Point(1,0);
+                                position = rock.position + new Point(1, 0);
+                            }
+                        }
+                        else if(tmp.x > 0)
+                        {
+                            if (rock.position == new Point(0, position.y))
+                            {
+                                rock.position = position - new Point(1, 0);
+                                position = rock.position - new Point(1, 0);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    position = coords;
+                }
+
                 firstTour = false;
-                position = coords;
-
-                if ((oldPosition - position).x >= 2)
-                {
-                    position = oldPosition - new Point(2, 0);
-                    List<Piece> rocks = other.GetAllPieces("Rock", color);
-                    foreach (Piece rock in rocks)
-                    {
-                        if (rock.AtPosition(position - new Point(2, 0)))
-                        {
-                            rock.position = position - new Point(1, 0);
-                        }
-                    }
-                }
-                else if ((oldPosition - position).x <= -2)
-                {
-                    position = oldPosition + new Point(2, 0);
-                    List<Piece> rocks = other.GetAllPieces("Rock", color);
-                    foreach (Piece rock in rocks)
-                    {
-                        if (rock.AtPosition(position + new Point(1, 0)))
-                        {
-                            rock.position = position - new Point(1, 0);
-                        }
-                    }
-                }
-
                 return true;
             }
             else

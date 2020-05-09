@@ -8,54 +8,57 @@ namespace ChessLogic
     public class Game
     {
         bool move = true;
+        public bool check = true;
         public List<Piece> piecesList = new List<Piece>();
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public Game()
+        public Game(bool init = true)
         {
-            init();
+            if (init)
+                Init();
         }
         /// <summary>
         /// Initialize game board
         /// </summary>
-        void init()
+        void Init()
         {
             //kings
             piecesList.Add(new King(new Point(4, 0), this, false));
             piecesList.Add(new King(new Point(4, 7), this, true));
-            //queens
+            ////queens
             piecesList.Add(new Queen(new Point(3, 0), this, false));
             piecesList.Add(new Queen(new Point(3, 7), this, true));
             //Pawn Black
-            //piecesList.Add(new Pawn(new Point(0, 1), this, false));
-            //piecesList.Add(new Pawn(new Point(1, 1), this, false));
-            //piecesList.Add(new Pawn(new Point(2, 1), this, false));
-            //piecesList.Add(new Pawn(new Point(3, 1), this, false));
-            //piecesList.Add(new Pawn(new Point(4, 1), this, false));
-            //piecesList.Add(new Pawn(new Point(5, 1), this, false));
-            //piecesList.Add(new Pawn(new Point(6, 1), this, false));
-            //piecesList.Add(new Pawn(new Point(7, 1), this, false));
+            piecesList.Add(new Pawn(new Point(0, 1), this, false));
+            piecesList.Add(new Pawn(new Point(1, 1), this, false));
+            piecesList.Add(new Pawn(new Point(2, 1), this, false));
+            piecesList.Add(new Pawn(new Point(3, 1), this, false));
+            piecesList.Add(new Pawn(new Point(4, 1), this, false));
+            piecesList.Add(new Pawn(new Point(5, 1), this, false));
+            piecesList.Add(new Pawn(new Point(6, 1), this, false));
+            piecesList.Add(new Pawn(new Point(7, 1), this, false));
             //Pawn White
-            //piecesList.Add(new Pawn(new Point(0, 6), this, true));
-            //piecesList.Add(new Pawn(new Point(1, 6), this, true));
-            //piecesList.Add(new Pawn(new Point(2, 6), this, true));
-            //piecesList.Add(new Pawn(new Point(3, 6), this, true));
-            //piecesList.Add(new Pawn(new Point(4, 6), this, true));
-            //piecesList.Add(new Pawn(new Point(5, 6), this, true));
-            //piecesList.Add(new Pawn(new Point(6, 6), this, true));
-            //piecesList.Add(new Pawn(new Point(7, 6), this, true));
+            piecesList.Add(new Pawn(new Point(0, 6), this, true));
+            piecesList.Add(new Pawn(new Point(1, 6), this, true));
+            piecesList.Add(new Pawn(new Point(2, 6), this, true));
+            piecesList.Add(new Pawn(new Point(3, 6), this, true));
+            piecesList.Add(new Pawn(new Point(4, 6), this, true));
+            piecesList.Add(new Pawn(new Point(5, 6), this, true));
+            piecesList.Add(new Pawn(new Point(6, 6), this, true));
+            piecesList.Add(new Pawn(new Point(7, 6), this, true));
             //knight
             piecesList.Add(new Knight(new Point(1, 0), this, false));
             piecesList.Add(new Knight(new Point(6, 0), this, false));
             piecesList.Add(new Knight(new Point(1, 7), this, true));
             piecesList.Add(new Knight(new Point(6, 7), this, true));
-            //rock
+            ////rock
             piecesList.Add(new Rock(new Point(0, 0), this, false));
             piecesList.Add(new Rock(new Point(7, 0), this, false));
             piecesList.Add(new Rock(new Point(0, 7), this, true));
             piecesList.Add(new Rock(new Point(7, 7), this, true));
-            //Bishop
+            ////Bishop
             piecesList.Add(new Bishop(new Point(2, 0), this, false));
             piecesList.Add(new Bishop(new Point(5, 0), this, false));
             piecesList.Add(new Bishop(new Point(2, 7), this, true));
@@ -65,6 +68,7 @@ namespace ChessLogic
         {
             var enemyMoves = AllMoves(!color);
             var King = GetAllPieces("King", color);
+
             if (enemyMoves.Contains(King[0].position))
             {
                 return true;
@@ -86,6 +90,7 @@ namespace ChessLogic
             {
                 if (p.AtPosition(coords))
                 {
+
                     color = p.Color;
                     piece = p.PieceName;
                     return true;
@@ -108,7 +113,7 @@ namespace ChessLogic
                 {
                     if (p.Color != move)
                         return false;
-                    moves = p.PossibleMoves();
+                    moves = p.PossibleMoves(check);
 
                     return true;
                 }
@@ -116,7 +121,7 @@ namespace ChessLogic
             return false;
         }
 
-        public bool TryMakeMove(Point piece, Point coord, bool check=true)
+        public bool TryMakeMove(Point piece, Point coord)
         {
             foreach (Piece p in piecesList)
             {
@@ -125,7 +130,7 @@ namespace ChessLogic
                     if (p.Color != move)
                         return false;
 
-                    if (p.TryMakeMove(coord, check))
+                    if (p.TryMakeMove(coord))
                     {
                         TryBeatEnemy(coord, p.Color);
                         move = !move;
@@ -147,7 +152,7 @@ namespace ChessLogic
             {
                 if (p.Color == color)
                 {
-                    var moves = p.PossibleMoves(false);
+                    var moves = p.PossibleMoves(check);
                     foreach (Point move in moves)
                     {
                         tmp.Add(move);
@@ -227,11 +232,11 @@ namespace ChessLogic
         public List<Piece> GetAllPieces(string pieceType, bool color)
         {
             List<Piece> tmp = new List<Piece>();
-            foreach (Piece piece in piecesList)
+            for (int i = 0; i < piecesList.Count; i++)
             {
-                if (piece.PieceName == pieceType && piece.Color == color)
+                if (piecesList[i].PieceName == pieceType && piecesList[i].Color == color)
                 {
-                    tmp.Add(piece);
+                    tmp.Add(piecesList[i]);
                 }
             }
 
@@ -240,7 +245,7 @@ namespace ChessLogic
 
         public Game Copy()
         {
-            Game tmp = new Game();
+            Game tmp = new Game(false);
             foreach (Piece piece in piecesList)
             {
                 switch (piece.PieceName)

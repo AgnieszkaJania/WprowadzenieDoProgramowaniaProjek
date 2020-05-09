@@ -11,7 +11,7 @@ namespace ChessLogic
             pieceName = "Rock";
         }
 
-        public override List<Point> PossibleMoves(bool king = true)
+        public override List<Point> PossibleMoves(bool check=true)
         {
             List<Point> tmp = new List<Point>();
 
@@ -84,6 +84,17 @@ namespace ChessLogic
                     else
                     {
                         tmp.Add(position + new Point(-i, 0));
+                    }
+                }
+            }
+
+            if (check)
+            {
+                for (int i = tmp.Count - 1; i >= 0; i--)
+                {
+                    if (Check(tmp[i]))
+                    {
+                        tmp.Remove(tmp[i]);
                     }
                 }
             }

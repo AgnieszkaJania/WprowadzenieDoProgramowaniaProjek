@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ChessLogic
 {
-    class Queen:Piece
+    class Queen : Piece
     {
-        public Queen(Point coords, Game board, bool color, bool firstTour = true) : base(coords, board, color,firstTour)
+        public Queen(Point coords, Game board, bool color, bool firstTour = true) : base(coords, board, color, firstTour)
         {
             pieceName = "Queen";
         }
 
-        public override List<Point> PossibleMoves(bool king = true)
+        public override List<Point> PossibleMoves(bool check = true)
         {
             List<Point> tmp = new List<Point>();
 
@@ -149,6 +147,17 @@ namespace ChessLogic
                 }
             }
 
+            if (check)
+            {
+                for (int i = tmp.Count - 1; i >= 0; i--)
+                {
+                    if (Check(tmp[i]))
+                    {
+
+                        tmp.Remove(tmp[i]);
+                    }
+                }
+            }
             return tmp;
         }
     }

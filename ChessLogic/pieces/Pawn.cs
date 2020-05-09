@@ -11,24 +11,35 @@ namespace ChessLogic
             pieceName = "Pawn";
         }
 
-        public override List<Point> PossibleMoves(bool king = true)
+        public override List<Point> PossibleMoves(bool check = true)
         {
             List<Point> tmp = new List<Point>();
 
-            if (other.CheckIfEnemy(position + new Point(1, Direction), color) || !king)
+            if (other.CheckIfEnemy(position + new Point(1, Direction), color) || !check)
             {
                 tmp.Add(position + new Point(1, Direction));
             }
-            if (other.CheckIfEnemy(position + new Point(-1, Direction), color) || !king)
+            if (other.CheckIfEnemy(position + new Point(-1, Direction), color) || !check)
             {
                 tmp.Add(position + new Point(-1, Direction));
             }
-            if (!other.TryGetPiece(position + new Point(0, Direction), out bool c, out string p) && king)
+            if (!other.TryGetPiece(position + new Point(0, Direction), out bool c, out string p))
             {
                 tmp.Add(position + new Point(0, Direction));
                 if(!other.TryGetPiece(position + new Point(0, 2*Direction), out bool c2, out string p2) && firstTour)
                 {
                     tmp.Add(position + new Point(0, 2*Direction));
+                }
+            }
+
+            if (check)
+            {
+                for (int i = tmp.Count - 1; i >= 0; i--)
+                {
+                    if (Check(tmp[i]))
+                    {
+                        tmp.Remove(tmp[i]);
+                    }
                 }
             }
 

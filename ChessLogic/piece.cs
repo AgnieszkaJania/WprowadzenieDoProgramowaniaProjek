@@ -43,26 +43,16 @@ namespace ChessLogic
         /// return list of possible moves
         /// </summary>
         /// <returns></returns>
-        public abstract List<Point> PossibleMoves(bool king = true);
+        public abstract List<Point> PossibleMoves(bool check = true);
         /// <summary>
         /// Makes a move
         /// </summary>
         /// <param name="coords">coords where piece have to go</param>
         /// <returns>true if successful</returns>
-        public virtual bool TryMakeMove(Point coords, bool check = true)
+        public virtual bool TryMakeMove(Point coords)
         {
-            if (PossibleMoves().Contains(coords))
+            if (PossibleMoves(other.check).Contains(coords))
             {
-                if (check)
-                {
-                    Game simulate = other.Copy();
-                    simulate.TryMakeMove(position, coords, false);
-                
-                    if(simulate.IsCheck(color))
-                    {
-                        return false;
-                    }
-                }
                 firstTour = false;
                 position = coords;
                 return true;
@@ -82,6 +72,19 @@ namespace ChessLogic
                 return true;
             else
                 return false;
+        }
+
+        protected bool Check(Point coords)
+        {
+            Game simulate = other.Copy();
+            simulate.check = false;
+            simulate.TryMakeMove(position, coords);
+
+            if (simulate.IsCheck(color))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
