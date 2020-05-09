@@ -67,8 +67,8 @@ namespace ChessView
                 Console.BackgroundColor = ConsoleColor.Blue;
             else if (point.Equals(selected))
                 Console.BackgroundColor = ConsoleColor.DarkYellow;
-            else if (movesList.Contains(point))
-                Console.BackgroundColor = ConsoleColor.Red;
+            //else if (movesList.Contains(point))
+            //    Console.BackgroundColor = ConsoleColor.Red;
             else if (point.AddXY % 2 == 0 == side)
                 Console.BackgroundColor = ConsoleColor.Green;
             else

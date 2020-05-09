@@ -6,7 +6,7 @@ namespace ChessLogic
 {
     class Bishop : Piece
     {
-        public Bishop(Point coords, Game board, bool color) : base(coords, board, color)
+        public Bishop(Point coords, Game board, bool color,bool firstTour = true) : base(coords, board, color,firstTour)
         {
             pieceName = "Bishop";
         }

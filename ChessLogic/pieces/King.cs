@@ -8,17 +8,15 @@ namespace ChessLogic
 {
     class King : Piece
     {
-        bool FirstTour;
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="coords">piece startcoords</param>
         /// <param name="pieces">list of other pieces</param>
         /// <param name="color">piece color</param>
-        public King(Point coords, Game board, bool color) : base(coords, board, color)
+        public King(Point coords, Game board, bool color, bool firstTour = true) : base(coords, board, color, firstTour)
         {
             pieceName = "King";
-            FirstTour = true;
         }
         /// <summary>
         /// return list of possible moves
@@ -54,7 +52,7 @@ namespace ChessLogic
                 }
             }
 
-            if (FirstTour && king)
+            if (firstTour && king)
             {
                 List<Piece> rocks = other.GetAllPieces("Rock", color);
 
@@ -66,7 +64,7 @@ namespace ChessLogic
                         {
                             if (rock.AtPosition(position + new Point(3, 0)))
                             {
-                                if (((Rock)(rock)).FirstTour)
+                                if (((Rock)(rock)).firstTour)
                                 {
                                     tmp.Add(position + new Point(2, 0));
                                     tmp.Add(position + new Point(3, 0));
@@ -86,7 +84,7 @@ namespace ChessLogic
                             {
                                 if (rock.AtPosition(position + new Point(-4, 0)))
                                 {
-                                    if (((Rock)(rock)).FirstTour)
+                                    if (((Rock)(rock)).firstTour)
                                     {
                                         tmp.Add(position + new Point(-2, 0));
                                         tmp.Add(position + new Point(-3, 0));
@@ -101,12 +99,12 @@ namespace ChessLogic
 
             return tmp;
         }
-        public override bool TryMakeMove(Point coords)
+        public override bool TryMakeMove(Point coords, bool undefined)
         {
             if (PossibleMoves().Contains(coords))
             {
                 Point oldPosition = position;
-                FirstTour = false;
+                firstTour = false;
                 position = coords;
 
                 if ((oldPosition - position).x >= 2)

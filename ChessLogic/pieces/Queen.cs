@@ -6,7 +6,7 @@ namespace ChessLogic
 {
     class Queen:Piece
     {
-        public Queen(Point coords, Game board, bool color) : base(coords, board, color)
+        public Queen(Point coords, Game board, bool color, bool firstTour = true) : base(coords, board, color,firstTour)
         {
             pieceName = "Queen";
         }

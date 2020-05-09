@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace ChessLogic
 {
     public abstract class Piece
     {
+        public bool firstTour;
         //position on board
         public Point position;
         //list of other Piece on board
@@ -14,7 +16,9 @@ namespace ChessLogic
         //get piece data
         public string PieceName { get => pieceName; }
         public bool Color { get => color; }
-        public int Direction { get
+        public int Direction
+        {
+            get
             {
                 if (color)
                     return -1;
@@ -28,11 +32,12 @@ namespace ChessLogic
         /// <param name="coords">piece startcoords</param>
         /// <param name="pieces">list of other pieces</param>
         /// <param name="color">piece color</param>
-        protected Piece(Point coords, Game pieces, bool color)
+        protected Piece(Point coords, Game pieces, bool color, bool firstTour = true)
         {
             position = coords;
             other = pieces;
             this.color = color;
+            this.firstTour = firstTour;
         }
         /// <summary>
         /// return list of possible moves
@@ -44,10 +49,21 @@ namespace ChessLogic
         /// </summary>
         /// <param name="coords">coords where piece have to go</param>
         /// <returns>true if successful</returns>
-        public virtual bool TryMakeMove(Point coords)
+        public virtual bool TryMakeMove(Point coords, bool check = true)
         {
             if (PossibleMoves().Contains(coords))
             {
+                if (check)
+                {
+                    Game simulate = other.Copy();
+                    simulate.TryMakeMove(position, coords, false);
+                
+                    if(simulate.IsCheck(color))
+                    {
+                        return false;
+                    }
+                }
+                firstTour = false;
                 position = coords;
                 return true;
             }
