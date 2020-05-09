@@ -87,5 +87,22 @@ namespace ChessLogic
             }
             return false;
         }
+
+        public List<Point> AllMoves(bool color)
+        {
+            List<Point> tmp = new List<Point>();
+            foreach(Piece p in piecesList)
+            {
+                if(p.Color==color)
+                {
+                    var moves = p.PossibleMoves(false);
+                    foreach (Point move in moves)
+                    {
+                        tmp.Add(move);
+                    }
+                }
+            }
+            return tmp;
+        }
     }
 }

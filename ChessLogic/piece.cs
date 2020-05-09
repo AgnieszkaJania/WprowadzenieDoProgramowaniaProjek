@@ -30,7 +30,7 @@ namespace ChessLogic
         /// return list of possible moves
         /// </summary>
         /// <returns></returns>
-        public abstract List<Point> PossibleMoves();
+        public abstract List<Point> PossibleMoves(bool king = true);
         /// <summary>
         /// Makes a move
         /// </summary>
