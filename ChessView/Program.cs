@@ -13,7 +13,8 @@ namespace ChessView
         //position of cursor
         static Point cursor = new Point(3, 6);
         //selected fields
-        static List<Point> selected = new List<Point>();
+        static Point selected = new Point(-1, -1);
+        static List<Point> movesList = new List<Point>();
         //game logic
         static Game game = new Game();
         //sizes
@@ -22,14 +23,16 @@ namespace ChessView
         const int fieldHeight = 3;
         //side
         const bool side = false;
+        //way of presentating pieces 1-chars 0-icons
+        static short presentationMethod = 0;
         //dictionery pieces and icons
-        static Dictionary<string, char> piecesIcons = new Dictionary<string, char> {
-            { "King", '♚' },
-            { "Queen", '♛'},
-            { "Rock", '♜'},
-            { "Bishop", '♝'},
-            { "Knight", '♞'},
-            { "Pawn", '♟'}
+        static Dictionary<string, string> piecesIcons = new Dictionary<string, string> {
+            { "King", "♚K" },
+            { "Queen", "♛Q"},
+            { "Rock", "♜R"},
+            { "Bishop", "♝B"},
+            { "Knight", "♞k"},
+            { "Pawn", "♟P"}
         };
 
         /// <summary>
@@ -58,10 +61,14 @@ namespace ChessView
             if (!point.check(boardSize - 1))
                 return;
             //center board
-            int shift = (Console.WindowWidth - (boardSize * fieldWidth)) / 2;
+            int shift = (Console.WindowWidth - (boardSize * (fieldWidth + presentationMethod))) / 2;
             //set bg color
             if (point.Equals(cursor))
                 Console.BackgroundColor = ConsoleColor.Blue;
+            else if (point.Equals(selected))
+                Console.BackgroundColor = ConsoleColor.DarkYellow;
+            else if (movesList.Contains(point))
+                Console.BackgroundColor = ConsoleColor.Red;
             else if (point.AddXY % 2 == 0 == side)
                 Console.BackgroundColor = ConsoleColor.Green;
             else
@@ -72,12 +79,18 @@ namespace ChessView
             {
                 //set cursor position
                 Console.CursorTop = point.y * fieldHeight + i;
-                Console.CursorLeft = shift + (point.x * fieldWidth);
+                Console.CursorLeft = shift + (point.x * (fieldWidth + presentationMethod));
                 //field height
-                for (int j = 0; j < fieldWidth; j++)
+                for (int j = 0; j < fieldWidth + presentationMethod; j++)
                 {
-                    if (i == fieldHeight / 2 && j == fieldWidth / 2 - 1)
-                        Console.Write(piecesIcons["King"]);
+                    if (i == fieldHeight / 2 && j == (fieldWidth + presentationMethod) / 2 - (1 - presentationMethod) && game.TryGetPiece(point, out bool color, out string piece))
+                    {
+                        if (color)
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                        else
+                            Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write(piecesIcons[piece][presentationMethod]);
+                    }
                     else
                         Console.Write(' ');
                 }
@@ -90,7 +103,7 @@ namespace ChessView
         /// change cursor position
         /// </summary>
         /// <param name="position">new cursor position</param>
-        static public void MoveCursor(Point position)
+        static void MoveCursor(Point position)
         {
             //check data valid
             if (!position.check(boardSize - 1)) return;
@@ -105,11 +118,73 @@ namespace ChessView
         }
 
         /// <summary>
-        /// 
+        /// change selected item
         /// </summary>
         static void Apply()
         {
-
+            if(movesList.Contains(cursor))
+            {
+                if(game.TryMakeMove(selected, cursor))
+                {
+                    
+                }
+                //copy selected
+                Point oldSelected = selected;
+                //clear selected
+                selected = new Point(-1, -1);
+                //copy move list
+                List<Point> old = movesList;
+                //clear move list
+                movesList = new List<Point>();
+                //clear old position
+                foreach (Point tmp in old)
+                {
+                    DrawField(tmp);
+                }
+                //clear old selected
+                DrawField(oldSelected);
+            }
+            else if (game.TryGetMoves(cursor, out List<Point> moves))
+            {
+                //copy selected
+                Point oldSelected = selected;
+                //change selected point
+                selected = cursor;
+                //copy move list
+                List<Point> old = movesList;
+                //replace move list with new list
+                movesList = moves;
+                //draw new list
+                foreach(Point tmp in moves)
+                {
+                    DrawField(tmp);
+                }
+                //clear old position
+                foreach (Point tmp in old)
+                {
+                    DrawField(tmp);
+                }
+                //clear old selected
+                DrawField(oldSelected);
+            }
+            else
+            {
+                //copy selected
+                Point oldSelected = selected;
+                //clear selected
+                selected = new Point(-1, -1);
+                //copy move list
+                List<Point> old = movesList;
+                //clear move list
+                movesList = new List<Point>();
+                //clear old position
+                foreach (Point tmp in old)
+                {
+                    DrawField(tmp);
+                }
+                //clear old selected
+                DrawField(oldSelected);
+            }
         }
 
         /// <summary>
@@ -120,7 +195,7 @@ namespace ChessView
             //draw board
             DrawBoard();
             //infiniti loop
-            while(true)
+            while (true)
             {
                 //set console cursor location
                 Console.CursorLeft = 0;
@@ -131,7 +206,7 @@ namespace ChessView
                 switch (key)
                 {
                     case ConsoleKey.UpArrow:
-                        MoveCursor(cursor + new Point(0,-1));
+                        MoveCursor(cursor + new Point(0, -1));
                         break;
                     case ConsoleKey.DownArrow:
                         MoveCursor(cursor + new Point(0, 1));
@@ -141,6 +216,9 @@ namespace ChessView
                         break;
                     case ConsoleKey.RightArrow:
                         MoveCursor(cursor + new Point(1, 0));
+                        break;
+                    case ConsoleKey.Enter:
+                        Apply();
                         break;
                 }
             }
