@@ -213,10 +213,10 @@ namespace ChessView
             {//Deselect
                 //copy and replace selected
                 Point oldSelected = selected;
-                selected = cursor;
+                selected = new Point(-1,-1);
                 //copy and replace moves
                 List<Point> oldMoves = possibleMoves;
-                possibleMoves = moves;
+                possibleMoves = new List<Point>();
                 //clear old
                 foreach (Point point in oldMoves)
                 {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ChessLogic
 {
-    abstract class Piece
+    public abstract class Piece
     {
         //informs if the piece has already made a move
         protected bool firstTour;

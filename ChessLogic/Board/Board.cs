@@ -61,7 +61,7 @@
                 switch (piece.PieceName)
                 {
                     case "King":
-                        newBoard.piecesList.Add(new King(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour, piece.Move));
+                        newBoard.piecesList.Add(new King(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour));
                         break;
                     case "Queen":
                         newBoard.piecesList.Add(new Queen(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour, piece.Move));

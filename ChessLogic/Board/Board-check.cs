@@ -73,7 +73,6 @@ namespace ChessLogic
                     return false;
                 }
             }
-
             return false;
         }
         /// <summary>

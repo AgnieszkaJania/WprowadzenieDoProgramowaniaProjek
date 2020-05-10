@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ChessLogic
 {
-    internal class King : Piece
+    public class King : Piece
     {
         /// <summary>
         /// Constructor
@@ -23,6 +24,16 @@ namespace ChessLogic
             //list of possible moves
             List<Point> moves = new List<Point>();
 
+            //castling
+            if(board.LongCastling(color))
+            {
+                moves.Add(position + new Point(-2, 0));
+            }
+            if(board.ShortCastling(color))
+            {
+                moves.Add(position + new Point(2, 0));
+            }
+
             //check the movements for approx
             for (int i = -1; i <= 1; i++)
             {
@@ -41,6 +52,7 @@ namespace ChessLogic
                     }
                 }
             }
+
             //remove all life-threatening movements of the king
             if (check)
             {
@@ -53,6 +65,28 @@ namespace ChessLogic
                 }
             }
             return moves;
+        }
+
+        public override bool TryMakeMove(Point position, bool check = true)
+        {
+            if (PossibleMoves.Contains(position))
+            {
+                int pos = this.position.x - position.x;
+                if (Math.Abs(pos)==2)
+                {
+                    if (pos == 2)
+                        board.MakeLongCastling(this);
+                    else
+                        board.MakeShortCastling(this);
+                    firstTour = false;
+                    return true;
+                }
+
+                firstTour = false;
+                this.position = position;
+                return true;
+            }
+            return false;
         }
     }
 }
