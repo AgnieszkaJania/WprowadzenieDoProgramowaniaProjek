@@ -25,11 +25,11 @@ namespace ChessLogic
             List<Point> moves = new List<Point>();
 
             //castling
-            if(board.LongCastling(color))
+            if (board.LongCastling(color))
             {
                 moves.Add(position + new Point(-2, 0));
             }
-            if(board.ShortCastling(color))
+            if (board.ShortCastling(color))
             {
                 moves.Add(position + new Point(2, 0));
             }
@@ -66,13 +66,19 @@ namespace ChessLogic
             }
             return moves;
         }
-
+        /// <summary>
+        /// Trying to make a move with a pawn 
+        /// </summary>
+        /// <param name="position">the position at which to move</param>
+        /// <returns>returns true if the operation was successful</returns>
         public override bool TryMakeMove(Point position, bool check = true)
         {
             if (PossibleMoves.Contains(position))
             {
+                //checks for castling
+
                 int pos = this.position.x - position.x;
-                if (Math.Abs(pos)==2)
+                if (Math.Abs(pos) == 2)
                 {
                     if (pos == 2)
                         board.MakeLongCastling(this);

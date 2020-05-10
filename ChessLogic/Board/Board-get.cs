@@ -153,7 +153,10 @@ namespace ChessLogic
             }
             return false;
         }
-
+        /// <summary>
+        /// Make a short castling
+        /// </summary>
+        /// <param name="king">the king who performs</param>
         public void MakeShortCastling(King king)
         {
             Piece rock = new Rock(null, null, false);
@@ -169,7 +172,10 @@ namespace ChessLogic
             rock.position = king.position - new Point(-1, 0);
             king.position = king.position - new Point(-2, 0);
         }
-
+        /// <summary>
+        /// Make a long castling
+        /// </summary>
+        /// <param name="king">the king who performs</param>
         public void MakeLongCastling(King king)
         {
             Piece rock = new Rock(null, null, false);
