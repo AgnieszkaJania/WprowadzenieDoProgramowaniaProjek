@@ -6,96 +6,112 @@ namespace ChessLogic
 {
     class Bishop : Piece
     {
-        public Bishop(Point coords, Game board, bool color,bool firstTour = true) : base(coords, board, color,firstTour)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="coords">Postion of piece</param>
+        /// <param name="board">the board on which the piece is located</param>
+        /// <param name="color">color of piece</param>
+        /// <param name="firstTour">informs if the piece has already made a move</param>
+        public Bishop(Point coords, Board board, bool color, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
         {
             pieceName = "Bishop";
         }
-
-        public override List<Point> PossibleMoves(bool check=true)
+        /// <summary>
+        /// Returns a list of possible moves
+        /// </summary>
+        protected override List<Point> Moves(bool check = true)
         {
-            List<Point> tmp = new List<Point>();
+            //list of possible moves
+            List<Point> moves = new List<Point>();
 
-            bool tl = true, tr = true, bl = true, br = true;
-
+            //check all oblique lines
+            //up left
             for (int i = 1; i < 8; i++)
             {
-                if (!(tl || tr || bl || br))
-                    return tmp;
 
-                if (tl)
+                Point shift = position + new Point(-i, -i);
+                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
                 {
-                    if (other.CheckIfPiece(position + new Point(i, i), out bool outColor))
-                    {
-                        if (outColor != color)
-                        {
-                            tmp.Add(position + new Point(i, i));
-                        }
-                        tl = false;
-                    }
-                    else
-                    {
-                        tmp.Add(position + new Point(i, i));
-                    }
+                    if (color != this.color)
+                        moves.Add(shift);
+                    break;
                 }
-                if (tr)
+                else
                 {
-                    if (other.CheckIfPiece(position + new Point(-i, i), out bool outColor))
-                    {
-                        if (outColor != color)
-                        {
-                            tmp.Add(position + new Point(-i, i));
-                        }
-                        tr = false;
-                    }
+                    if (shift.Between(7))
+                        moves.Add(shift);
                     else
-                    {
-                        tmp.Add(position + new Point(-i, i));
-                    }
+                        break;
                 }
-                if (bl)
+            }
+            //up right
+            for (int i = 1; i < 8; i++)
+            {
+                Point shift = position + new Point(i, -i);
+                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
                 {
-                    if (other.CheckIfPiece(position + new Point(i, -i), out bool outColor))
-                    {
-                        if (outColor != color)
-                        {
-                            tmp.Add(position + new Point(i, -i));
-                        }
-                        bl = false;
-                    }
-                    else
-                    {
-                        tmp.Add(position + new Point(i, -i));
-                    }
+                    if (color != this.color)
+                        moves.Add(shift);
+                    break;
                 }
-                if (br)
+                else
                 {
-                    if (other.CheckIfPiece(position + new Point(-i, -i), out bool outColor))
-                    {
-                        if (outColor != color)
-                        {
-                            tmp.Add(position + new Point(-i, -i));
-                        }
-                        br = false;
-                    }
+                    if (shift.Between(7))
+                        moves.Add(shift);
                     else
-                    {
-                        tmp.Add(position + new Point(-i, -i));
-                    }
+                        break;
+                }
+            }
+            //down left
+            for (int i = 1; i < 8; i++)
+            {
+                Point shift = position + new Point(-i, i);
+                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                {
+                    if (color != this.color)
+                        moves.Add(shift);
+                    break;
+                }
+                else
+                {
+                    if (shift.Between(7))
+                        moves.Add(shift);
+                    else
+                        break;
+                }
+            }
+            //down right
+            for (int i = 1; i < 8; i++)
+            {
+                Point shift = position + new Point(i, i);
+                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                {
+                    if (color != this.color)
+                        moves.Add(shift);
+                    break;
+                }
+                else
+                {
+                    if (shift.Between(7))
+                        moves.Add(shift);
+                    else
+                        break;
                 }
             }
 
+            //remove all life-threatening movements of the king
             if (check)
             {
-                for (int i = tmp.Count - 1; i >= 0; i--)
+                for (int i = moves.Count - 1; i >= 0; i--)
                 {
-                    if (Check(tmp[i]))
+                    if (Check(moves[i]))
                     {
-                        tmp.Remove(tmp[i]);
+                        moves.Remove(moves[i]);
                     }
                 }
             }
-
-            return tmp;
+            return moves;
         }
     }
 }

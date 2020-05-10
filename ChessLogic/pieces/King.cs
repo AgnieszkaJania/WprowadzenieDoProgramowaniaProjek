@@ -1,147 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ChessLogic
 {
-    class King : Piece
+    internal class King : Piece
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="coords">piece startcoords</param>
-        /// <param name="pieces">list of other pieces</param>
-        /// <param name="color">piece color</param>
-        public King(Point coords, Game board, bool color, bool firstTour = true) : base(coords, board, color, firstTour)
+        /// <param name="coords">Postion of piece</param>
+        /// <param name="board">the board on which the piece is located</param>
+        /// <param name="color">color of piece</param>
+        /// <param name="firstTour">informs if the piece has already made a move</param>
+        public King(Point coords, Board board, bool color, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
         {
             pieceName = "King";
         }
         /// <summary>
-        /// return list of possible moves
+        /// Returns a list of possible moves
         /// </summary>
-        /// <returns></returns>
-        public override List<Point> PossibleMoves(bool check = true)
+        protected override List<Point> Moves(bool check = true)
         {
-            var tmp = new List<Point>();
+            //list of possible moves
+            List<Point> moves = new List<Point>();
 
-            if (firstTour)
-            {
-                var rocks = other.GetAllPieces("Rock", color);
-                foreach (var rock in rocks)
-                {
-                    if (rock.firstTour)
-                    {
-                        int min = (rock.position.x < position.x) ? rock.position.x : position.x;
-                        int max = (rock.position.x > position.x) ? rock.position.x : position.x;
-
-                        List<Point> RememberMe = new List<Point>();
-                        bool allay = false;
-
-                        for (int i = min; i <= max + 1; i++)
-                        {
-                            var point = new Point(i, position.y);
-
-                            if (other.CheckIfAlly(point, color) && point != position && point != rock.position)
-                            {
-                                allay = true;
-                                break;
-                            }
-
-                            tmp.Add(point);
-                            RememberMe.Add(point);
-                        }
-
-                        if (check)
-                        {
-                            for (int i = tmp.Count - 1; i >= 0; i--)
-                            {
-                                if (Check(tmp[i]) || allay)
-                                {
-                                    foreach (Point remember in RememberMe)
-                                    {
-                                        tmp.Remove(remember);
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
+            //check the movements for approx
             for (int i = -1; i <= 1; i++)
             {
                 for (int j = -1; j <= 1; j++)
                 {
                     if (!(j == 0 && i == 0))
                     {
-                        Point newPoint = position + new Point(i, j);
-                        if (newPoint.check(7))
+                        Point shift = position + new Point(i, j);
+                        if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
                         {
-                            if (!other.CheckIfAlly(newPoint, color))
-                                tmp.Add(newPoint);
+                            if (color != this.color)
+                                moves.Add(shift);
                         }
+                        else if (shift.Between(7))
+                            moves.Add(shift);
                     }
                 }
             }
-
+            //remove all life-threatening movements of the king
             if (check)
             {
-                for (int i = tmp.Count - 1; i >= 0; i--)
+                for (int i = moves.Count - 1; i >= 0; i--)
                 {
-                    if (Check(tmp[i]))
+                    if (Check(moves[i]))
                     {
-                        tmp.Remove(tmp[i]);
+                        moves.Remove(moves[i]);
                     }
                 }
             }
-
-            return tmp;
-        }
-
-        public override bool TryMakeMove(Point coords)
-        {
-            if (PossibleMoves(other.check).Contains(coords))
-            {
-                var tmp = position - coords;
-
-                if (Math.Abs(tmp.x) > 1)
-                {
-                    var rocks = other.GetAllPieces("Rock", color);
-                    foreach (var rock in rocks)
-                    {
-                        if (tmp.x < 0)
-                        {
-                            if (rock.position == new Point(7, position.y))
-                            {
-                                rock.position = position + new Point(1,0);
-                                position = rock.position + new Point(1, 0);
-                            }
-                        }
-                        else if(tmp.x > 0)
-                        {
-                            if (rock.position == new Point(0, position.y))
-                            {
-                                rock.position = position - new Point(1, 0);
-                                position = rock.position - new Point(1, 0);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    position = coords;
-                }
-
-                firstTour = false;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return moves;
         }
     }
 }

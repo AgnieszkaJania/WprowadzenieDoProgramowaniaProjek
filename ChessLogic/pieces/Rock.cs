@@ -1,105 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Net.Sockets;
 
 namespace ChessLogic
 {
     class Rock : Piece
     {
-        public Rock(Point coords, Game board, bool color, bool firstTour = true) : base(coords, board, color, firstTour)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="coords">Postion of piece</param>
+        /// <param name="board">the board on which the piece is located</param>
+        /// <param name="color">color of piece</param>
+        /// <param name="firstTour">informs if the piece has already made a move</param>
+        public Rock(Point coords, Board board, bool color, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
         {
             pieceName = "Rock";
         }
-
-        public override List<Point> PossibleMoves(bool check=true)
+        /// <summary>
+        /// Returns a list of possible moves
+        /// </summary>
+        protected override List<Point> Moves(bool check = true)
         {
-            List<Point> tmp = new List<Point>();
+            //list of possible moves
+            List<Point> moves = new List<Point>();
 
-            bool t = true, b = true, l = true, r = true;
-
+            //check all straight lines
+            //up
             for (int i = 1; i < 8; i++)
             {
-                if (!(t || b || l || r))
-                    return tmp;
-
-                //check top
-                if (t)
+                Point shift = position + new Point(0,-i);
+                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
                 {
-                    if (other.CheckIfPiece(position + new Point(0, i), out bool outColor))
-                    {
-                        if (outColor != color)
-                        {
-                            tmp.Add(position + new Point(0, i));
-                        }
-                        t = false;
-                    }
-                    else
-                    {
-                        tmp.Add(position + new Point(0, i));
-                    }
+                    if (color != this.color)
+                        moves.Add(shift);
+                    break;
                 }
-                //check bottom
-                if (b)
+                else
                 {
-                    if (other.CheckIfPiece(position + new Point(0, -i), out bool outColor))
-                    {
-                        if (outColor != color)
-                        {
-                            tmp.Add(position + new Point(0, -i));
-                        }
-                        b = false;
-                    }
+                    if (shift.Between(7))
+                        moves.Add(shift);
                     else
-                    {
-                        tmp.Add(position + new Point(0, -i));
-                    }
-                }
-                //check right
-                if (r)
-                {
-                    if (other.CheckIfPiece(position + new Point(i, 0), out bool outColor))
-                    {
-                        if (outColor != color)
-                        {
-                            tmp.Add(position + new Point(i, 0));
-                        }
-                        r = false;
-                    }
-                    else
-                    {
-                        tmp.Add(position + new Point(i, 0));
-                    }
-                }
-                //check left
-                if (l)
-                {
-                    if (other.CheckIfPiece(position + new Point(-i, 0), out bool outColor))
-                    {
-                        if (outColor != color)
-                        {
-                            tmp.Add(position + new Point(-i, 0));
-                        }
-                        l = false;
-                    }
-                    else
-                    {
-                        tmp.Add(position + new Point(-i, 0));
-                    }
+                        break;
                 }
             }
-
+            //down
+            for (int i = 1; i < 8; i++)
+            {
+                Point shift = position + new Point(0, i);
+                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                {
+                    if (color != this.color)
+                        moves.Add(shift);
+                    break;
+                }
+                else
+                {
+                    if (shift.Between(7))
+                        moves.Add(shift);
+                    else
+                        break;
+                }
+            }
+            //left
+            for (int i = 1; i < 8; i++)
+            {
+                Point shift = position + new Point(-i, 0);
+                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                {
+                    if (color != this.color)
+                        moves.Add(shift);
+                    break;
+                }
+                else
+                {
+                    if (shift.Between(7))
+                        moves.Add(shift);
+                    else
+                        break;
+                }
+            }
+            //right
+            for (int i = 1; i < 8; i++)
+            {
+                Point shift = position + new Point(i, 0);
+                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                {
+                    if (color != this.color)
+                        moves.Add(shift);
+                    break;
+                }
+                else
+                {
+                    if (shift.Between(7))
+                        moves.Add(shift);
+                    else
+                        break;
+                }
+            }
+            //remove all life-threatening movements of the king
             if (check)
             {
-                for (int i = tmp.Count - 1; i >= 0; i--)
+                for (int i = moves.Count - 1; i >= 0; i--)
                 {
-                    if (Check(tmp[i]))
+                    if (Check(moves[i]))
                     {
-                        tmp.Remove(tmp[i]);
+                        moves.Remove(moves[i]);
                     }
                 }
             }
 
-            return tmp;
+            return moves;
         }
     }
 }
