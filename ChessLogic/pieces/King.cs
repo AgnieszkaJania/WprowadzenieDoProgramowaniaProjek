@@ -42,7 +42,7 @@ namespace ChessLogic
                     if (!(j == 0 && i == 0))
                     {
                         Point shift = position + new Point(i, j);
-                        if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                        if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
                         {
                             if (color != this.color)
                                 moves.Add(shift);

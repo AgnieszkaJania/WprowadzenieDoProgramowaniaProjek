@@ -28,7 +28,7 @@ namespace ChessLogic
             //check all L - shaped lines
             {//up right
                 Point shift = position + new Point(1, -2);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -41,7 +41,7 @@ namespace ChessLogic
             }
             {//up left
                 Point shift = position + new Point(-1, -2);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -54,7 +54,7 @@ namespace ChessLogic
             }
             {//left up
                 Point shift = position + new Point(-2, -1);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -67,7 +67,7 @@ namespace ChessLogic
             }
             {//left down
                 Point shift = position + new Point(-2, 1);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -80,7 +80,7 @@ namespace ChessLogic
             }
             {//down left
                 Point shift = position + new Point(-1, 2);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -93,7 +93,7 @@ namespace ChessLogic
             }
             {//down right
                 Point shift = position + new Point(1, 2);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -106,7 +106,7 @@ namespace ChessLogic
             }
             {//right down
                 Point shift = position + new Point(2, 1);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -119,7 +119,7 @@ namespace ChessLogic
             }
             {//right up
                 Point shift = position + new Point(2, -1);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
