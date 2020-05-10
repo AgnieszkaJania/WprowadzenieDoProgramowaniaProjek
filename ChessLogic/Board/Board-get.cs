@@ -70,9 +70,9 @@ namespace ChessLogic
             }
 
             //check for free gearing
-            if (TryGetPieceNameColorAtPosition(king.position + new Point(1, 0), out string p, out bool c))
+            if (TryGetPieceNameColorAtPosition(king.position + new Point(1, 0), out _, out _))
                 return false;
-            if (TryGetPieceNameColorAtPosition(king.position + new Point(2, 0), out p, out c))
+            if (TryGetPieceNameColorAtPosition(king.position + new Point(2, 0), out _, out _))
                 return false;
             //check if they are being attacked
             if (enemyMoves.Contains(king.position))
@@ -130,11 +130,11 @@ namespace ChessLogic
             }
 
             //check for free gearing
-            if (TryGetPieceNameColorAtPosition(king.position + new Point(-1, 0), out string p, out bool c))
+            if (TryGetPieceNameColorAtPosition(king.position + new Point(-1, 0), out _, out _))
                 return false;
-            if (TryGetPieceNameColorAtPosition(king.position + new Point(-2, 0), out p, out c))
+            if (TryGetPieceNameColorAtPosition(king.position + new Point(-2, 0), out _, out _))
                 return false;
-            if (TryGetPieceNameColorAtPosition(king.position + new Point(-3, 0), out p, out c))
+            if (TryGetPieceNameColorAtPosition(king.position + new Point(-3, 0), out _, out _))
                 return false;
             //check if they are being attacked
             if (enemyMoves.Contains(king.position))
@@ -170,7 +170,7 @@ namespace ChessLogic
             }
 
             rock.position = king.position - new Point(-1, 0);
-            king.position = king.position - new Point(-2, 0);
+            king.position -= new Point(-2, 0);
         }
         /// <summary>
         /// Make a long castling
@@ -189,7 +189,7 @@ namespace ChessLogic
             }
 
             rock.position = king.position - new Point(1, 0);
-            king.position = king.position - new Point(2, 0);
+            king.position -= new Point(2, 0);
         }
     }
 }
