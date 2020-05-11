@@ -11,7 +11,7 @@ namespace ChessLogic
         public int x;
         public int y;
         //Return x+y;
-        public int xADDy { get => x + y; }
+        public int XaddY { get => x + y; }
         /// <summary>
         /// Constructor
         /// </summary>

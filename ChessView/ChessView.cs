@@ -86,7 +86,7 @@ namespace ChessView
                     Console.BackgroundColor = ConsoleColor.DarkYellow;
                 else if (possibleMoves.Contains(position))//selected field possible moves
                     Console.BackgroundColor = ConsoleColor.Red;
-                else if (position.xADDy % 2 == 0 == side)//black fields
+                else if (position.XaddY % 2 == 0 == side)//black fields
                     Console.BackgroundColor = ConsoleColor.Green;
                 else//white fields
                     Console.BackgroundColor = ConsoleColor.White;
@@ -145,7 +145,7 @@ namespace ChessView
             else
             {
                 //if you try to draw outside the board, display error
-                throw new ArgumentException($"You are trying to draw a field outside the board: {position.ToString()}");
+                throw new ArgumentException($"You are trying to draw a field outside the board: {position}");
             }
         }
         /// <summary>

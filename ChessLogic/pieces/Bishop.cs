@@ -31,7 +31,7 @@ namespace ChessLogic
             {
 
                 Point shift = position + new Point(-i, -i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -49,7 +49,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(i, -i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -67,7 +67,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(-i, i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -85,7 +85,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(i, i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);

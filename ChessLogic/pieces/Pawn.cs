@@ -31,7 +31,7 @@ namespace ChessLogic
 
             {//check straight line
                 Point shift = position + new Point(0, Direction);
-                if (!board.TryGetPieceNameColorAtPosition(shift, out string name1, out bool color1))
+                if (!board.TryGetPieceNameColorAtPosition(shift, out _, out _))
                 {
                     //single move
                     if (shift.Between(7))
@@ -41,8 +41,8 @@ namespace ChessLogic
                     //double move
                     if(firstTour)
                     {
-                        shift = shift + new Point(0, Direction);
-                        if (!board.TryGetPieceNameColorAtPosition(shift, out string name2, out bool color2))
+                        shift += new Point(0, Direction);
+                        if (!board.TryGetPieceNameColorAtPosition(shift, out _, out _))
                         {
                             if (shift.Between(7))
                             {
@@ -54,13 +54,13 @@ namespace ChessLogic
             }
             {//check for possible beats
                 Point shift = position + new Point(1, Direction);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name1, out bool color1))
+                if (board.TryGetPieceNameColorAtPosition(shift, out _, out bool color1))
                 {
                     if(color1!=color)
                         moves.Add(shift);
                 }
                 shift = position + new Point(-1, Direction);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string name2, out bool color2))
+                if (board.TryGetPieceNameColorAtPosition(shift, out _, out bool color2))
                 {
                     if (color2 != color)
                         moves.Add(shift);
