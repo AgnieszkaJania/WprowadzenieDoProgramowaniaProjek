@@ -76,14 +76,19 @@ namespace ChessLogic
             if (PossibleMoves.Contains(position))
             {
                 //checks for castling
-
                 int pos = this.position.x - position.x;
                 if (Math.Abs(pos) == 2)
                 {
                     if (pos == 2)
-                        board.MakeLongCastling(this);
+                    {
+                        if (!board.MakeLongCastling(this))
+                            return false;
+                    }
                     else
-                        board.MakeShortCastling(this);
+                    {
+                        if (!board.MakeShortCastling(this))
+                            return false;
+                    }
                     firstTour = false;
                     return true;
                 }

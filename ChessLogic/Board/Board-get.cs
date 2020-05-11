@@ -157,8 +157,14 @@ namespace ChessLogic
         /// Make a short castling
         /// </summary>
         /// <param name="king">the king who performs</param>
-        public void MakeShortCastling(King king)
+        public bool MakeShortCastling(King king)
         {
+            //check if possible
+            if (king.PossibleMoves.Contains(king.position - new Point(2, 0)))
+            {
+                return false;
+            }
+
             Piece rock = new Rock(null, null, false);
             foreach (Piece piece in piecesList)
             {
@@ -171,13 +177,19 @@ namespace ChessLogic
 
             rock.position = king.position - new Point(-1, 0);
             king.position -= new Point(-2, 0);
+            return true;
         }
         /// <summary>
         /// Make a long castling
         /// </summary>
         /// <param name="king">the king who performs</param>
-        public void MakeLongCastling(King king)
+        public bool MakeLongCastling(King king)
         {
+            //check if possible
+            if (king.PossibleMoves.Contains(king.position + new Point(2, 0)))
+            {
+                return false;
+            }
             Piece rock = new Rock(null, null, false);
             foreach (Piece piece in piecesList)
             {
@@ -190,6 +202,7 @@ namespace ChessLogic
 
             rock.position = king.position - new Point(1, 0);
             king.position -= new Point(2, 0);
+            return true;
         }
     }
 }
