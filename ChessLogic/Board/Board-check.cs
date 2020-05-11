@@ -165,7 +165,22 @@ namespace ChessLogic
             if(mode)
             {
                 piecesList.Remove(pawn);
-                piecesList.Add(new Queen(pawn.position, this, pawn.Color, pawn.FirstTour, pawn.Move));
+
+                switch(pawnPromotion())
+                {
+                    case Pieces.Queen:
+                        piecesList.Add(new Queen(pawn.position, this, pawn.Color, pawn.FirstTour, pawn.Move));
+                        break;
+                    case Pieces.Bishop:
+                        piecesList.Add(new Bishop(pawn.position, this, pawn.Color, pawn.FirstTour, pawn.Move));
+                        break;
+                    case Pieces.Rock:
+                        piecesList.Add(new Rock(pawn.position, this, pawn.Color, pawn.FirstTour, pawn.Move));
+                        break;
+                    case Pieces.Knight:
+                        piecesList.Add(new Knight(pawn.position, this, pawn.Color, pawn.FirstTour, pawn.Move));
+                        break;
+                }
             }
         }
     }

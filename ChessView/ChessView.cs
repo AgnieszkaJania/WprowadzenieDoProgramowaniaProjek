@@ -46,7 +46,7 @@ namespace ChessView
         List<Point> possibleMoves = new List<Point>();
         public ChessView(bool side)
         {
-            board = new Board();
+            board = new Board(SelectPawnPromotion);
             this.side = side;
         }
         /// <summary>
@@ -54,6 +54,7 @@ namespace ChessView
         /// </summary>
         public void DrawBoard()
         {
+            Console.Clear();
             //board height
             for (int i = 0; i < (int)Sizes.Board; i++)
             {
@@ -146,7 +147,56 @@ namespace ChessView
                 throw new ArgumentException($"You are trying to draw a field outside the board: {position}");
             }
         }
-        
+        /// <summary>
+        /// Choosing pawn promotion
+        /// </summary>
+        /// <returns></returns>
+        public Board.Pieces SelectPawnPromotion()
+        {
+            //default value
+            Board.Pieces piece = Board.Pieces.NULL;
+            while (piece == Board.Pieces.NULL)
+            {
+                //download key
+                ConsoleKey key = Console.ReadKey().Key;
+                Console.Clear();
+
+                Console.WriteLine("Wybierz awans pionka");
+                //show options
+                if (presentationMethod)//0
+                {
+                    Console.WriteLine($"1) {PieceList[Board.Pieces.Queen][0]}");
+                    Console.WriteLine($"2) {PieceList[Board.Pieces.Bishop][0]}");
+                    Console.WriteLine($"3) {PieceList[Board.Pieces.Rock][0]}");
+                    Console.WriteLine($"4) {PieceList[Board.Pieces.Knight][0]}");
+                }
+                else//1
+                {
+                    Console.WriteLine($"1) {PieceList[Board.Pieces.Queen][1]}");
+                    Console.WriteLine($"2) {PieceList[Board.Pieces.Bishop][1]}");
+                    Console.WriteLine($"3) {PieceList[Board.Pieces.Rock][1]}");
+                    Console.WriteLine($"4) {PieceList[Board.Pieces.Knight][1]}");
+                }
+
+                switch (key)
+                {
+                    case ConsoleKey.D1:
+                        piece = Board.Pieces.Queen;
+                        break;
+                    case ConsoleKey.D2:
+                        piece = Board.Pieces.Bishop;
+                        break;
+                    case ConsoleKey.D3:
+                        piece = Board.Pieces.Rock;
+                        break;
+                    case ConsoleKey.D4:
+                        piece = Board.Pieces.Knight;
+                        break;
+                }
+            }
+
+            return piece;
+        }
         /// <summary>
         /// Changes the cursor position
         /// </summary>

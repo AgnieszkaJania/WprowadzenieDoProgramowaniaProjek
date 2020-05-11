@@ -56,7 +56,7 @@ namespace ChessLogic
         public Board Copy(bool mode)
         {
             //create new board
-            Board newBoard = new Board(mode);
+            Board newBoard = new Board(pawnPromotion, mode);
             //copy all active pieces
             foreach (Piece piece in piecesList)
             {

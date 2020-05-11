@@ -53,7 +53,6 @@ namespace ChessLogic
                 moves.Add(position + new Point(2, 0));
             }
 
-
             //remove all life-threatening movements of the king
             if (check)
             {

@@ -24,7 +24,7 @@ namespace ChessView
             while (game)
             {
                 //set cursor position
-                Console.CursorTop = Console.WindowHeight-1;
+                Console.CursorTop = Console.WindowHeight - 1;
                 Console.CursorLeft = 0;
 
                 //download pressed key

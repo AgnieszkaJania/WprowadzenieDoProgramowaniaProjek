@@ -17,6 +17,7 @@ namespace ChessLogic
         //true - normal
         //false - as a simulation
         bool mode;
+        Func<Pieces> pawnPromotion;
         /// <summary>
         /// return operationg mode
         /// </summary>
@@ -34,8 +35,9 @@ namespace ChessLogic
         /// <summary>
         /// Constructor
         /// </summary>
-        public Board(bool mode = true)
+        public Board(Func<Pieces> pawnPromotion,bool mode = true)
         {
+            this.pawnPromotion = pawnPromotion;
             this.mode = mode;
             if(mode)
             {
