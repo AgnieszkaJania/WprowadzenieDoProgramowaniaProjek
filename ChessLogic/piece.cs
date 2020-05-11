@@ -99,7 +99,7 @@ namespace ChessLogic
             //create new board to simulate new tour
             Board simulate = board.Copy();
             //simulate move
-            simulate.TryMakeMove(position, coords);
+            simulate.TryMakeMove(position, coords, out _);
             //chek if king in danger
             if (simulate.IsCheck(color))
                 return true;

@@ -19,9 +19,9 @@ namespace ChessView
             board.DrawBoard();
 
             //Information about whether the game is still ongoing
-            bool Game = true;
+            bool game = true;
             //input loop
-            while (Game)
+            while (game)
             {
                 //set cursor position
                 Console.CursorTop = Console.WindowHeight-1;
@@ -44,7 +44,17 @@ namespace ChessView
                         break;
 
                     case ConsoleKey.Enter://Make a move or select a piece
-                        board.SelectPiece();
+                        board.SelectPiece(out var status);
+                        //game status
+                        switch (status)
+                        {
+                            case Board.GameStates.Draw:
+                                game = false;
+                                break;
+                            case Board.GameStates.Mat:
+                                game = false;
+                                break;
+                        }
                         break;
                 }
             }

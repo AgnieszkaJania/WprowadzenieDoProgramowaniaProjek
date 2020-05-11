@@ -1,4 +1,6 @@
-﻿namespace ChessLogic
+﻿using System;
+
+namespace ChessLogic
 {
     public partial class Board
     {
@@ -14,23 +16,23 @@
             piecesList.Add(new Queen(new Point(3, 0), this, true));
             piecesList.Add(new Queen(new Point(3, 7), this, false));
             //Pawn Black
-            piecesList.Add(new Pawn(new Point(0, 1), this, true));
-            piecesList.Add(new Pawn(new Point(1, 1), this, true));
-            piecesList.Add(new Pawn(new Point(2, 1), this, true));
-            piecesList.Add(new Pawn(new Point(3, 1), this, true));
-            piecesList.Add(new Pawn(new Point(4, 1), this, true));
-            piecesList.Add(new Pawn(new Point(5, 1), this, true));
-            piecesList.Add(new Pawn(new Point(6, 1), this, true));
-            piecesList.Add(new Pawn(new Point(7, 1), this, true));
+            piecesList.Add(new Pawn(new Point(0, 1), this, true, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(1, 1), this, true, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(2, 1), this, true, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(3, 1), this, true, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(4, 1), this, true, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(5, 1), this, true, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(6, 1), this, true, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(7, 1), this, true, PawnPromotion));
             //Pawn White
-            piecesList.Add(new Pawn(new Point(0, 6), this, false));
-            piecesList.Add(new Pawn(new Point(1, 6), this, false));
-            piecesList.Add(new Pawn(new Point(2, 6), this, false));
-            piecesList.Add(new Pawn(new Point(3, 6), this, false));
-            piecesList.Add(new Pawn(new Point(4, 6), this, false));
-            piecesList.Add(new Pawn(new Point(5, 6), this, false));
-            piecesList.Add(new Pawn(new Point(6, 6), this, false));
-            piecesList.Add(new Pawn(new Point(7, 6), this, false));
+            piecesList.Add(new Pawn(new Point(0, 6), this, false, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(1, 6), this, false, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(2, 6), this, false, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(3, 6), this, false, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(4, 6), this, false, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(5, 6), this, false, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(6, 6), this, false, PawnPromotion));
+            piecesList.Add(new Pawn(new Point(7, 6), this, false, PawnPromotion));
             //knight
             piecesList.Add(new Knight(new Point(1, 0), this, true));
             piecesList.Add(new Knight(new Point(6, 0), this, true));
@@ -47,6 +49,7 @@
             piecesList.Add(new Bishop(new Point(2, 7), this, false));
             piecesList.Add(new Bishop(new Point(5, 7), this, false));
         }
+
         /// <summary>
         /// Makes copies of the current table
         /// </summary>
@@ -76,7 +79,7 @@
                         newBoard.piecesList.Add(new Knight(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour, piece.Move));
                         break;
                     case "Pawn":
-                        newBoard.piecesList.Add(new Pawn(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour, piece.Move));
+                        newBoard.piecesList.Add(new Pawn(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, PawnPromotion, piece.FirstTour, piece.Move));
                         break;
                 }
             }

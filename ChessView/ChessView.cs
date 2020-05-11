@@ -173,9 +173,10 @@ namespace ChessView
         /// <summary>
         /// Sets the piece under the cursor to selected or moves the selected piece
         /// </summary>
-        public void SelectPiece()
+        public void SelectPiece(out Board.GameStates game)
         {
-            if (board.TryMakeMove(selected, cursor))
+            game = Board.GameStates.Game;
+            if (board.TryMakeMove(selected, cursor, out Board.GameStates status))
             {//Making a move
                 //clear selected
                 selected = new Point(-1, -1);
@@ -183,6 +184,8 @@ namespace ChessView
                 possibleMoves.Clear();
                 //draw board
                 DrawBoard();
+                //change status
+                game = status;
             }
             else if (board.TryGetMoves(cursor, out List<Point> moves))
             {//Change selection
@@ -213,7 +216,7 @@ namespace ChessView
             {//Deselect
                 //copy and replace selected
                 Point oldSelected = selected;
-                selected = new Point(-1,-1);
+                selected = new Point(-1, -1);
                 //copy and replace moves
                 List<Point> oldMoves = possibleMoves;
                 possibleMoves = new List<Point>();

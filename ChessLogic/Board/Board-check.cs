@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 
 namespace ChessLogic
 {
@@ -40,8 +38,9 @@ namespace ChessLogic
         /// <param name="position">piece coords</param>
         /// <param name="coords">place to move</param>
         /// <returns>returns true if the action was successful</returns>
-        public bool TryMakeMove(Point position, Point coords)
+        public bool TryMakeMove(Point position, Point coords, out GameStates status)
         {
+            status = GameStates.Game;
             foreach (Piece piece in piecesList)
             {
                 //find piece
@@ -55,7 +54,7 @@ namespace ChessLogic
                         {
                             if (remove.position == coords)
                             {
-                                if(remove.Color != move)
+                                if (remove.Color != move)
                                 {
                                     //beat
                                     piecesList.Remove(remove);
@@ -63,10 +62,11 @@ namespace ChessLogic
                                 }
                             }
                         }
-
                         //make a move
                         move = !move;
                         movesMade.Add(new KeyValuePair<Point, Point>(position, coords));
+
+                        status = Status();
 
                         return true;
                     }
@@ -108,6 +108,65 @@ namespace ChessLogic
             if (EnemyMoves.Contains(King.position))
                 return true;
             return false;
+        }
+        /// <summary>
+        /// list of possible game states
+        /// </summary>
+        public enum GameStates
+        {
+            Game = 0,
+            Mat = 1,
+            Draw = 2
+        };
+        /// <summary>
+        /// checks the current status of the board
+        /// </summary>
+        /// <returns>status name</returns>
+        GameStates Status()
+        {
+            //king
+            King king = new King(null, null, move);
+            //list of enemy moves
+            List<Point> enemyMove = new List<Point>();
+            //find object
+            foreach (Piece piece in piecesList)
+            {
+                if (piece.Color == move)
+                {
+                    //if you can make a move further game possible
+                    if (piece.PossibleMoves.Count > 0)
+                        return GameStates.Game;
+                    //position of king
+                    if (piece.PieceName == "King")
+                        king = (King)piece;
+                }
+                else
+                {
+                    //get all the fields under your opponent's rule
+                    foreach (Point point in piece.PossibleMoves)
+                    {
+                        if (!enemyMove.Contains(point))
+                            enemyMove.Add(point);
+                    }
+                }
+            }
+            //if the king is under attack then mate
+            if (enemyMove.Contains(king.position))
+                return GameStates.Mat;
+            //if you can't move and you are not under attack then a draw
+            return GameStates.Draw;
+        }
+        /// <summary>
+        /// implementation of the pawn promotion
+        /// </summary>
+        /// <param name="pawn">pawn to promotion</param>
+        void PawnPromotion(Piece pawn)
+        {
+            if(mode)
+            {
+                piecesList.Remove(pawn);
+                piecesList.Add(new Queen(pawn.position, this, pawn.Color, pawn.FirstTour, pawn.Move));
+            }
         }
     }
 }

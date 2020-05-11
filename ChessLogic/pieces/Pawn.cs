@@ -8,6 +8,7 @@ namespace ChessLogic
         //direction of movement of the pawns
         protected int Direction { get { return (color) ? 1 : -1; } }
 
+        protected Action<Pawn> promotion;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -15,8 +16,9 @@ namespace ChessLogic
         /// <param name="board">the board on which the piece is located</param>
         /// <param name="color">color of piece</param>
         /// <param name="firstTour">informs if the piece has already made a move</param>
-        public Pawn(Point coords, Board board, bool color, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
+        public Pawn(Point coords, Board board, bool color, Action<Pawn> promotion, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
         {
+            this.promotion = promotion;
             pieceName = "Pawn";
         }
         /// <summary>
@@ -78,6 +80,26 @@ namespace ChessLogic
             }
 
             return moves;
+        }
+
+        public override bool TryMakeMove(Point position, bool check = true)
+        {
+            if (PossibleMoves.Contains(position))
+            {
+                firstTour = false;
+                this.position = position;
+
+                if (check)
+                {
+                    if (Direction == 1 && position.y == 7)
+                        promotion(this);
+                    if (Direction == -1 && position.y == 0)
+                        promotion(this);
+                }
+
+                return true;
+            }
+            return false;
         }
     }
 }
