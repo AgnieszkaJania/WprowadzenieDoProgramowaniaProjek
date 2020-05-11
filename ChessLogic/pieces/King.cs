@@ -43,6 +43,17 @@ namespace ChessLogic
                 }
             }
 
+            //castling
+            if (board.LongCastling(color))
+            {
+                moves.Add(position + new Point(-2, 0));
+            }
+            if (board.ShortCastling(color))
+            {
+                moves.Add(position + new Point(2, 0));
+            }
+
+
             //remove all life-threatening movements of the king
             if (check)
             {
