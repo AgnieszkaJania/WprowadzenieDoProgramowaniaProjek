@@ -18,14 +18,14 @@ namespace ChessLogic
         //the board on which the piece is located
         protected Board board;
         //chessman name
-        protected string pieceName;
+        protected Board.Pieces pieceName;
         //calculated movements
         int move;
 
         //get Data
         public bool FirstTour { get => firstTour; }
         public bool Color { get => color; }
-        public string PieceName { get => pieceName; }
+        public Board.Pieces PieceName { get => pieceName; }
         public int Move { get => move; }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace ChessLogic
         protected bool Check(Point coords)
         {
             //create new board to simulate new tour
-            Board simulate = board.Copy();
+            Board simulate = board.Copy(false);
             //simulate move
             simulate.TryMakeMove(position, coords, out _);
             //chek if king in danger

@@ -15,7 +15,7 @@ namespace ChessLogic
         /// <param name="firstTour">informs if the piece has already made a move</param>
         public Bishop(Point coords, Board board, bool color, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
         {
-            pieceName = "Bishop";
+            pieceName = Board.Pieces.Bishop;
         }
         /// <summary>
         /// Returns a list of possible moves

@@ -53,32 +53,32 @@ namespace ChessLogic
         /// <summary>
         /// Makes copies of the current table
         /// </summary>
-        public Board Copy()
+        public Board Copy(bool mode)
         {
             //create new board
-            Board newBoard = new Board(false);
+            Board newBoard = new Board(mode);
             //copy all active pieces
             foreach (Piece piece in piecesList)
             {
                 //select piece
                 switch (piece.PieceName)
                 {
-                    case "King":
+                    case Pieces.King:
                         newBoard.piecesList.Add(new King(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour));
                         break;
-                    case "Queen":
+                    case Pieces.Queen:
                         newBoard.piecesList.Add(new Queen(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour, piece.Move));
                         break;
-                    case "Rock":
+                    case Pieces.Rock:
                         newBoard.piecesList.Add(new Rock(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour, piece.Move));
                         break;
-                    case "Bishop":
+                    case Pieces.Bishop:
                         newBoard.piecesList.Add(new Bishop(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour, piece.Move));
                         break;
-                    case "Knight":
+                    case Pieces.Knight:
                         newBoard.piecesList.Add(new Knight(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, piece.FirstTour, piece.Move));
                         break;
-                    case "Pawn":
+                    case Pieces.Pawn:
                         newBoard.piecesList.Add(new Pawn(new Point(piece.position.x, piece.position.y), newBoard, piece.Color, PawnPromotion, piece.FirstTour, piece.Move));
                         break;
                 }

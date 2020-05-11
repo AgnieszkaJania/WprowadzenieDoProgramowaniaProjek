@@ -14,7 +14,7 @@ namespace ChessLogic
         /// <param name="firstTour">informs if the piece has already made a move</param>
         public King(Point coords, Board board, bool color, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
         {
-            pieceName = "King";
+            pieceName = Board.Pieces.King;
         }
         /// <summary>
         /// Returns a list of possible moves
@@ -24,16 +24,6 @@ namespace ChessLogic
             //list of possible moves
             List<Point> moves = new List<Point>();
 
-            //castling
-            if (board.LongCastling(color))
-            {
-                moves.Add(position + new Point(-2, 0));
-            }
-            if (board.ShortCastling(color))
-            {
-                moves.Add(position + new Point(2, 0));
-            }
-
             //check the movements for approx
             for (int i = -1; i <= 1; i++)
             {
@@ -42,7 +32,7 @@ namespace ChessLogic
                     if (!(j == 0 && i == 0))
                     {
                         Point shift = position + new Point(i, j);
-                        if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
+                        if (board.TryGetPieceNameColorAtPosition(shift, out Board.Pieces _, out bool color))
                         {
                             if (color != this.color)
                                 moves.Add(shift);

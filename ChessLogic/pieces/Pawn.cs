@@ -19,7 +19,7 @@ namespace ChessLogic
         public Pawn(Point coords, Board board, bool color, Action<Pawn> promotion, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
         {
             this.promotion = promotion;
-            pieceName = "Pawn";
+            pieceName = Board.Pieces.Pawn;
         }
         /// <summary>
         /// Returns a list of possible moves

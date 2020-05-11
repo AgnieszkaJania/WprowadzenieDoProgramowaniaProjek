@@ -11,10 +11,10 @@ namespace ChessLogic
         /// <param name="pieceName">return pieceName</param>
         /// <param name="color">return pieceColor</param>
         /// <returns>True if found</returns>
-        public bool TryGetPieceNameColorAtPosition(Point position, out string pieceName, out bool color)
+        public bool TryGetPieceNameColorAtPosition(Point position, out Pieces pieceName, out bool color)
         {
             //set default values
-            pieceName = "";
+            pieceName = Pieces.NULL;
             color = false;
             //for all piece
             foreach (Piece piece in piecesList)
@@ -47,14 +47,14 @@ namespace ChessLogic
             {
                 if (piece.Color == color)
                 {
-                    if (piece.PieceName == "King")
+                    if (piece.PieceName == Pieces.King)
                     {
                         if (piece.FirstTour)
                             king = (King)piece;
                         else
                             return false;
                     }
-                    else if (piece.PieceName == "Rock")
+                    else if (piece.PieceName == Pieces.Rock)
                         if (piece.FirstTour)
                             rockList.Add((Rock)piece);
                 }
@@ -107,14 +107,14 @@ namespace ChessLogic
             {
                 if (piece.Color == color)
                 {
-                    if (piece.PieceName == "King")
+                    if (piece.PieceName == Pieces.King)
                     {
                         if (piece.FirstTour)
                             king = (King)piece;
                         else
                             return false;
                     }
-                    else if (piece.PieceName == "Rock")
+                    else if (piece.PieceName == Pieces.Rock)
                         if (piece.FirstTour)
                             rockList.Add((Rock)piece);
                 }

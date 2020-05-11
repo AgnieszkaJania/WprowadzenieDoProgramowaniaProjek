@@ -47,14 +47,14 @@ namespace ChessLogic
                 if (piece.position == position)
                 {
                     //check if he can make a move
-                    if (piece.TryMakeMove(coords, mode) && piece.Color == move)
+                    if (piece.TryMakeMove(coords, mode))
                     {
                         //check if he has beaten anyone
                         foreach (Piece remove in piecesList)
                         {
                             if (remove.position == coords)
                             {
-                                if (remove.Color != move)
+                                if (remove.Color != piece.Color)
                                 {
                                     //beat
                                     piecesList.Remove(remove);
@@ -91,7 +91,7 @@ namespace ChessLogic
             {
                 if (piece.Color == color)
                 {
-                    if (piece.PieceName == "King")
+                    if (piece.PieceName == Pieces.King)
                     {
                         King = piece;
                     }
@@ -137,7 +137,7 @@ namespace ChessLogic
                     if (piece.PossibleMoves.Count > 0)
                         return GameStates.Game;
                     //position of king
-                    if (piece.PieceName == "King")
+                    if (piece.PieceName == Pieces.King)
                         king = (King)piece;
                 }
                 else

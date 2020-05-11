@@ -21,14 +21,14 @@ namespace ChessView
             FieldHeight = 3
         }
         //List of Chess pieces and their representation
-        readonly Dictionary<string, string> PieceList = new Dictionary<string, string>
+        readonly Dictionary<Board.Pieces, string> PieceList = new Dictionary<Board.Pieces, string>
         {
-            { "King", "♚K" },
-            { "Queen", "♛Q"},
-            { "Rock", "♜R"},
-            { "Bishop", "♝B"},
-            { "Knight", "♞k"},
-            { "Pawn", "♟P"}
+            { Board.Pieces.King, "♚K" },
+            { Board.Pieces.Queen, "♛Q"},
+            { Board.Pieces.Rock, "♜R"},
+            { Board.Pieces.Bishop, "♝B"},
+            { Board.Pieces.Knight, "♞k"},
+            { Board.Pieces.Pawn, "♟P"}
         };
         //Defines the way chess pieces will be displayed on the screen
         //true - Symbols
@@ -44,8 +44,6 @@ namespace ChessView
         Point selected = new Point(-1, -1);
         //list of possible moves to be made by the marked piece
         List<Point> possibleMoves = new List<Point>();
-
-
         public ChessView(bool side)
         {
             board = new Board();
@@ -107,7 +105,7 @@ namespace ChessView
                         if (i == (int)Sizes.FieldHeight / 2 && j == (int)Sizes.FieldWidth / 2 - changeWidth)
                         {
                             //check if there is a piece in the given position
-                            if (board.TryGetPieceNameColorAtPosition(position, out string name, out bool color))
+                            if (board.TryGetPieceNameColorAtPosition(position, out Board.Pieces name, out bool color))
                             {
                                 switch (color)
                                 {
@@ -148,6 +146,7 @@ namespace ChessView
                 throw new ArgumentException($"You are trying to draw a field outside the board: {position}");
             }
         }
+        
         /// <summary>
         /// Changes the cursor position
         /// </summary>

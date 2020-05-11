@@ -21,6 +21,16 @@ namespace ChessLogic
         /// return operationg mode
         /// </summary>
         public bool Mode { get => mode; }
+        public enum Pieces
+        {
+            King,
+            Knight,
+            Pawn,
+            Queen,
+            Rock,
+            Bishop,
+            NULL
+        }
         /// <summary>
         /// Constructor
         /// </summary>

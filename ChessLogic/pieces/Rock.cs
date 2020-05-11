@@ -15,7 +15,7 @@ namespace ChessLogic
         /// <param name="firstTour">informs if the piece has already made a move</param>
         public Rock(Point coords, Board board, bool color, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
         {
-            pieceName = "Rock";
+            pieceName = Board.Pieces.Rock;
         }
         /// <summary>
         /// Returns a list of possible moves

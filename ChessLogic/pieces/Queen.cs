@@ -14,7 +14,7 @@ namespace ChessLogic
         /// <param name="firstTour">informs if the piece has already made a move</param>
         public Queen(Point coords, Board board, bool color, bool firstTour = true, int move = -1) : base(coords, board, color, firstTour, move)
         {
-            pieceName = "Queen";
+            pieceName = Board.Pieces.Queen;
         }
         /// <summary>
         /// Returns a list of possible moves
@@ -29,7 +29,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(0, -i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out Board.Pieces _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -47,7 +47,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(0, i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out Board.Pieces _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -65,7 +65,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(-i, 0);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out Board.Pieces _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -83,7 +83,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(i, 0);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out Board.Pieces _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -103,7 +103,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(-i, -i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out Board.Pieces _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -121,7 +121,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(i, -i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out Board.Pieces _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -139,7 +139,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(-i, i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out Board.Pieces _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
@@ -157,7 +157,7 @@ namespace ChessLogic
             for (int i = 1; i < 8; i++)
             {
                 Point shift = position + new Point(i, i);
-                if (board.TryGetPieceNameColorAtPosition(shift, out string _, out bool color))
+                if (board.TryGetPieceNameColorAtPosition(shift, out Board.Pieces _, out bool color))
                 {
                     if (color != this.color)
                         moves.Add(shift);
