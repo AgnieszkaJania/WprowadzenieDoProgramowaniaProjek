@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+
 namespace ChessView
 {
     /// <summary>
@@ -11,6 +12,7 @@ namespace ChessView
     {
         //Game board
         Board board;
+        //Computer player
         /// <summary>
         /// Sizes for the drawn board
         /// </summary>
@@ -106,14 +108,14 @@ namespace ChessView
                         if (i == (int)Sizes.FieldHeight / 2 && j == (int)Sizes.FieldWidth / 2 - changeWidth)
                         {
                             //check if there is a piece in the given position
-                            if (board.TryGetPieceNameColorAtPosition(position, out Board.Pieces name, out bool color))
+                            if (board.TryGetPieceNameColorAtPosition(position, out Board.Side color, out Board.Pieces name))
                             {
                                 switch (color)
                                 {
-                                    case true:
+                                    case Board.Side.Black:
                                         Console.ForegroundColor = ConsoleColor.Black;
                                         break;
-                                    case false:
+                                    case Board.Side.White:
                                         Console.ForegroundColor = ConsoleColor.Gray;
                                         break;
                                 }
@@ -140,11 +142,6 @@ namespace ChessView
                 }
                 //reset colors
                 Console.ResetColor();
-            }
-            else
-            {
-                //if you try to draw outside the board, display error
-                throw new ArgumentException($"You are trying to draw a field outside the board: {position}");
             }
         }
         /// <summary>
@@ -222,10 +219,10 @@ namespace ChessView
         /// <summary>
         /// Sets the piece under the cursor to selected or moves the selected piece
         /// </summary>
-        public void SelectPiece(out Board.GameStates game)
+        public void SelectPiece(out Board.Status game)
         {
-            game = Board.GameStates.Game;
-            if (board.TryMakeMove(selected, cursor, out Board.GameStates status))
+            game = Board.Status.Game;
+            if (board.TryMakeMove(selected, cursor, out Board.Status status))
             {//Making a move
                 //clear selected
                 selected = new Point(-1, -1);

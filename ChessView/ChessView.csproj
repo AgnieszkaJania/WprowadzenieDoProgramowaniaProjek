@@ -9,4 +9,9 @@
     <ProjectReference Include="..\ChessLogic\ChessLogic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Chess\" />
+    <Folder Include="Menu\" />
+  </ItemGroup>
+
 </Project>

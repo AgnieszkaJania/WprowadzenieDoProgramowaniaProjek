@@ -48,10 +48,10 @@ namespace ChessView
                         //game status
                         switch (status)
                         {
-                            case Board.GameStates.Draw:
+                            case Board.Status.Pat:
                                 game = false;
                                 break;
-                            case Board.GameStates.Mat:
+                            case Board.Status.Mat:
                                 game = false;
                                 break;
                         }
