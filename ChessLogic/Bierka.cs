@@ -6,7 +6,7 @@ namespace Logika
     /// Lista wszystkich możliwych bierek
     /// </summary>
     public enum Bierki
-    {
+    {gfgfdufdyurdys
         Krol,
         Hetman,
         Goniec,
